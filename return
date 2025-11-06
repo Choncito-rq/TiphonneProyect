@@ -1,0 +1,30 @@
+[33mcommit 8274e973eb3e8ee6a66f365c957bb81c805d9e28[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 783ee18 d0e58e3
+Author: Josué Muro <murolopezjosue48@gmail.com>
+Date:   Tue Nov 4 23:48:09 2025 -0700
+
+    Merge branch 'main' of https://github.com/Choncito-rq/TiphonneProyect
+
+[33mcommit 783ee18c2eb70821a02e52bfdc0a181f0bbc6fd3[m
+Author: Josué Muro <murolopezjosue48@gmail.com>
+Date:   Tue Nov 4 23:41:59 2025 -0700
+
+    Esta es la prueba 3
+
+[33mcommit d0e58e3f2ff81feddbe0f0d74ab4a6c764210a0d[m
+Author: luisDVSS <8elilustrador8@gmail.com>
+Date:   Tue Nov 4 23:39:14 2025 -0700
+
+    Esta es la prueba 2
+
+[33mcommit 2b5176e6d735ebc3f2387f603bca9569a14b4ae6[m
+Author: luisDVSS <8elilustrador8@gmail.com>
+Date:   Tue Nov 4 23:25:56 2025 -0700
+
+    esto es una prueba
+
+[33mcommit 9cd63d5f755ba5e1d93c9ff5a84a2fb8b95964a4[m
+Author: Chonsi <murolopezjosue48@gmail.com>
+Date:   Tue Nov 4 23:10:45 2025 -0700
+
+    Initial commit
