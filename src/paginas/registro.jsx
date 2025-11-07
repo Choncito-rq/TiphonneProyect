@@ -1,6 +1,8 @@
 import { useState } from "react";
+import "./Registro.css"; // 👈 Asegúrate de tener este CSS
 
 export default function Registro_nuevo() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [confirmEmail, setConfirmEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -8,62 +10,87 @@ export default function Registro_nuevo() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Se envio:", email, confirmEmail, password, confirmPassword);
+
+    if (email !== confirmEmail) {
+      alert("Los correos no coinciden.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      alert("Las contraseñas no coinciden.");
+      return;
+    }
+
+    console.log("✅ Registro enviado:", name, email, password);
+    alert("Registro completado con éxito ✨");
   };
 
   return (
-    <div style={{ padding: "2rem", fontFamily: "sans-serif" }}>
-      <h1>Registro Nuevo</h1>
+    <div className="registro-container">
+      <div className="registro-card">
+        <h1 className="registro-title">Crear Cuenta</h1>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Correo electrónico:</label><br />
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="correo@ejemplo.com"
-            required
-          />
-        </div>
+        <form onSubmit={handleSubmit}>
+          <div className="input-group">
+            <label>Nombre de usuario</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Ej. Juan Pérez"
+              required
+            />
+          </div>
 
-        <div>
-          <label>Confirmar correo:</label><br />
-          <input
-            type="email"
-            value={confirmEmail}
-            onChange={(e) => setConfirmEmail(e.target.value)}
-            placeholder="repite tu correo"
-            required
-          />
-        </div>
+          <div className="input-group">
+            <label>Correo electrónico</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="correo@ejemplo.com"
+              required
+            />
+          </div>
 
-        <div>
-          <label>Contraseña:</label><br />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="********"
-            required
-          />
-        </div>
+          <div className="input-group">
+            <label>Confirmar correo</label>
+            <input
+              type="email"
+              value={confirmEmail}
+              onChange={(e) => setConfirmEmail(e.target.value)}
+              placeholder="correo@ejemplo.com"
+              required
+            />
+          </div>
 
-        <div>
-          <label>Confirmar contraseña:</label><br />
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder="********"
-            required
-          />
-        </div>
+          <div className="input-group">
+            <label>Contraseña</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="********"
+              required
+            />
+          </div>
 
-        <button type="submit" style={{ marginTop: "10px" }}>
-          Registrarse
-        </button>
-      </form>
+          <div className="input-group">
+            <label>Confirmar contraseña</label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="********"
+              required
+            />
+          </div>
+
+          <button type="submit" className="registro-button">
+            Registrarse
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

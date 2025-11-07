@@ -8,7 +8,6 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    //logica de validacion de correo
     if ((pswd == "1234") & (email === "luis@gmail.com")) {
       alert("listo");
       navegar("/home");
@@ -43,8 +42,12 @@ export default function Login() {
           Iniciar sesión
         </button>
 
-        <a className="login-a" href="#">
-          Olvidé mi contraseña
+        <a
+          onClick={() => navegar("/Recovered")}
+          className="login-a"
+          to="/Recover_Passwords"
+        >
+          Olvide mi Contraseña
         </a>
 
         <a

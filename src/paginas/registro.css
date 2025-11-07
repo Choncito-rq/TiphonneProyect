@@ -1,0 +1,64 @@
+.registro-card {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+  width: 320px;
+  box-sizing: border-box; 
+}
+
+.input-group {
+  margin-bottom: 1rem;
+}
+
+/*Caracteristicas del titulo */
+.registro-title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-size: 1.6rem;
+}
+
+
+.input-group label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+.input-group input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box; 
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-group input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 5px rgba(99, 102, 241, 0.3);
+  outline: none;
+}
+
+/*Caracteristicas del boton */
+.registro-button {
+  display: block;
+  width: 100%;
+  box-sizing: border-box; 
+  background-color: #04e238;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.registro-button:hover {
+  background-color: #4f46e5;
+}
