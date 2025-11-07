@@ -26,8 +26,8 @@ cursor:pointer ;
 
 }
 .login-a{
-color:rgb(153, 49, 153);;
-text-decoration:underline ;
+color:rgb(200, 197, 200);;
+
 }
 .main-input{
   padding: 5px;
@@ -48,5 +48,13 @@ outline: auto;
 .main-a:visited{
 color: rgb(11, 19, 63);
 }
+.login-optional{
+  display: flex;
+  justify-content: space-between; 
+  align-items: center; 
+  padding: 10px;
+
+}
+
 
 

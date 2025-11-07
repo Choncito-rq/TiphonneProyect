@@ -1,12 +1,12 @@
 .appbar {
   background-color: #1e1e1e;
-  color: black;
+  color: white;
   padding: 15px 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
 
+}
 .appbar nav a {
   color: white;
   text-decoration: none;
