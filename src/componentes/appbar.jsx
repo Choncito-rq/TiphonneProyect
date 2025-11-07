@@ -1,3 +1,4 @@
+import "./appbar.css";
 export default function Appbar() {
   return (
     <header className="appbar">
