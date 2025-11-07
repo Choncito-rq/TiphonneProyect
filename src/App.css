@@ -1,7 +1,6 @@
 #root {
-  max-width: 1280px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
 }
 
@@ -55,6 +54,7 @@ color: rgb(11, 19, 63);
   padding: 10px;
 
 }
+
 
 
 
