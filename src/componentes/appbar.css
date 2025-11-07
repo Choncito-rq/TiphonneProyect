@@ -1,0 +1,18 @@
+.appbar {
+  background-color: #1e1e1e;
+  color: black;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.appbar nav a {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+}
+
+.appbar nav a:hover {
+  text-decoration: underline;
+}
