@@ -1,25 +1,19 @@
 import { use, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const [Email, setEmail] = useState("");
-const [confrmEmail, setConfirmEmail] = useState("");
-const [Token, setToken] = useState("");
-
 export default function Recover() {
+  const [Email, setEmail] = useState("");
+  const [confrmEmail, setConfirmEmail] = useState("");
+  const [Token, setToken] = useState("");
 
- const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    
   };
 
-    return(
-        <div className="recover-container">
+  return (
+    <div className="recover-container">
       <div className="recover-card">
-
         <form onSubmit={handleSubmit}>
-
-
           <div className="input-group">
             <label>Correo electrónico</label>
             <input
@@ -42,12 +36,11 @@ export default function Recover() {
             />
           </div>
 
-
           <button type="submit" className="registro-button">
             Registrarse
           </button>
         </form>
       </div>
     </div>
-    )
+  );
 }

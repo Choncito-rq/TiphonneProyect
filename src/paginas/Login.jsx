@@ -42,22 +42,13 @@ export default function Login() {
           Iniciar sesión
         </button>
         <div className="login-optional">
+          <a onClick={() => navegar("/Recovered")} className="login-a">
+            Olvide mi Contraseña
+          </a>
 
-        <a
-          onClick={() => navegar("/Recovered")}
-          className="login-a"
-          to="/Recover_Passwords"
-        >
-          Olvide mi Contraseña
-        </a>
-
-        <a
-          onClick={() => navegar("/Registrarme")}
-          className="login-a"
-          to="/registro"
-        >
-          Registrarme
-        </a>
+          <a onClick={() => navegar("/Registrarme")} className="login-a">
+            Registrarme
+          </a>
         </div>
       </form>
     </div>
