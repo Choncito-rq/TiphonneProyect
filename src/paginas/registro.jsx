@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./Registro.css"; // 👈 Asegúrate de tener este CSS
+import "./Registro.css"; 
 
 export default function Registro_nuevo() {
   const [name, setName] = useState("");
@@ -20,9 +20,9 @@ export default function Registro_nuevo() {
       alert("Las contraseñas no coinciden.");
       return;
     }
-
-    console.log("✅ Registro enviado:", name, email, password);
-    alert("Registro completado con éxito ✨");
+      //Aqui debe de ir la conexion con API de Python
+    console.log("Registro enviado:", name, email, password);
+    alert("Registro completado con éxito");
   };
 
   return (
