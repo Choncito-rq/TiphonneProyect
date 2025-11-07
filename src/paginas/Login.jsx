@@ -11,18 +11,18 @@ export default function Login() {
     //logica de validacion de correo
     if ((pswd == "1234") & (email === "luis@gmail.com")) {
       alert("listo");
-      navegar("/registro");
-      token = generateToken();
+      navegar("/home");
+      //token = generateToken();
     } else {
       alert("datos incorrectos");
     }
   };
   return (
-    <div className="login-container">
+    <div className="main-container">
       <h1>Login :D</h1>
-      <form className="login-form" onSubmit={handleSubmit}>
+      <form className="main-form" onSubmit={handleSubmit}>
         <input
-          className="login-input"
+          className="main-input"
           type="email"
           value={email}
           placeholder="Correo electrónico"
@@ -30,7 +30,7 @@ export default function Login() {
           required
         />
         <input
-          className="login-input"
+          className="main-input"
           type="password"
           value={pswd}
           placeholder="Contraseña"
@@ -42,6 +42,9 @@ export default function Login() {
         </button>
         <a className="login-a" href="#">
           Olvidé mi contraseña
+        </a>
+        <a className="login-a" href="#">
+          Registrarme
         </a>
       </form>
     </div>

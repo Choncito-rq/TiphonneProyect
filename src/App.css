@@ -5,7 +5,7 @@
   text-align: center;
 }
 
-.login-container{
+.main-container{
 display: flex;
 flex-direction: column;
 background-color:rgb(34, 45, 108);
@@ -16,28 +16,28 @@ height: 50vh;
 }
 
 
-.login-form{
+.main-form{
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
-.login-input{
+.main-input{
   padding: 5px;
   border-radius: 6px;
   background-color: whitesmoke;
   color:rgb(26, 26, 26);
 }
-.login-input:focus,.login-input:focus-visible{
+.main-input:focus,.login-input:focus-visible{
 border-radius: 3px;
 
 }
-.login-button:focus,.login-button:focus-visible{
+.main-button:focus,.login-button:focus-visible{
 outline: auto;
 }
 .login-button{
   background-color: rgb(36, 109, 57);
 }
-.login-a:visited{
+.main-a:visited{
 color: rgb(12, 19, 57);
 }
 

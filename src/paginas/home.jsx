@@ -1,0 +1,64 @@
+import CardSubasta from "../componentes/cardSubasta";
+import "./home.css";
+export default function Home() {
+  return (
+    <div className="card-container">
+      <CardSubasta
+        id="1"
+        titulo="Perro"
+        imagen="https://picsum.photos/400/300"
+        precio="234s"
+        fechafin="23/2/2025"
+      />
+      <CardSubasta
+        id="1"
+        titulo="Perro"
+        imagen="https://picsum.photos/400/300"
+        precio="234s"
+        fechafin="23/2/2025"
+      />
+      <CardSubasta
+        id="1"
+        titulo="Perro"
+        imagen="https://picsum.photos/400/300"
+        precio="234s"
+        fechafin="23/2/2025"
+      />
+      <CardSubasta
+        id="1"
+        titulo="Perro"
+        imagen="https://picsum.photos/400/300"
+        precio="234s"
+        fechafin="23/2/2025"
+      />
+      <CardSubasta
+        id="1"
+        titulo="Perro"
+        imagen="https://picsum.photos/400/300"
+        precio="234s"
+        fechafin="23/2/2025"
+      />
+      <CardSubasta
+        id="1"
+        titulo="Perro"
+        imagen="https://picsum.photos/400/300"
+        precio="234s"
+        fechafin="23/2/2025"
+      />
+      <CardSubasta
+        id="1"
+        titulo="Perro"
+        imagen="https://picsum.photos/400/300"
+        precio="234s"
+        fechafin="23/2/2025"
+      />
+      <CardSubasta
+        id="1"
+        titulo="Perro"
+        imagen="https://picsum.photos/400/300"
+        precio="234s"
+        fechafin="23/2/2025"
+      />
+    </div>
+  );
+}
