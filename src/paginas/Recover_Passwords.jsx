@@ -1,18 +1,41 @@
-import { use, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+function generarToken(longitud = 8) {
+  const caracteres =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-+*_/<>";
+  let token = "";
+  for (let i = 0; i < longitud; i++) {
+    const indiceAleatorio = Math.floor(Math.random() * caracteres.length);
+    token += caracteres.charAt(indiceAleatorio);
+  }
+  return token;
+}
+
 export default function Recover() {
-  const [Email, setEmail] = useState("");
-  const [confrmEmail, setConfirmEmail] = useState("");
-  const [Token, setToken] = useState("");
+  const [email, setEmail] = useState("");
+  const [confirmEmail, setConfirmEmail] = useState("");
+  const [token, setToken] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (email !== confirmEmail) {
+      alert("Los correos no coinciden");
+      return;
+    }
+
+    const nuevoToken = generarToken();
+    setToken(nuevoToken);
+    navigate("/Verify");
   };
 
   return (
     <div className="recover-container">
       <div className="recover-card">
+        <h2 className="registro-title">Recuperar Cuenta</h2>
+
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <label>Correo electrónico</label>
@@ -37,9 +60,16 @@ export default function Recover() {
           </div>
 
           <button type="submit" className="registro-button">
-            Registrarse
+            Generar Token
           </button>
         </form>
+
+        {token && (
+          <div className="token-display">
+            <p>Tu token de recuperación es:</p>
+            <span>{token}</span>
+          </div>
+        )}
       </div>
     </div>
   );
