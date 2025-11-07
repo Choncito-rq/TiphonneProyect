@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Login() {
   const navegar = useNavigate();
@@ -19,8 +19,9 @@ export default function Login() {
   };
   return (
     <div className="main-container">
-      <h1>Login :D</h1>
+      <h1>Bienvenido</h1>
       <form className="main-form" onSubmit={handleSubmit}>
+
         <input
           className="main-input"
           type="email"
@@ -29,6 +30,7 @@ export default function Login() {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
+
         <input
           className="main-input"
           type="password"
@@ -37,15 +39,19 @@ export default function Login() {
           onChange={(e) => setPswd(e.target.value)}
           required
         />
+
         <button className="login-button" type="submit">
           Iniciar sesión
         </button>
+
         <a className="login-a" href="#">
           Olvidé mi contraseña
         </a>
-        <a className="login-a" href="#">
-          Registrarme
-        </a>
+
+        <Link className="login-a" to="/registro">
+        Registrarme
+        </Link>
+
       </form>
     </div>
   );
