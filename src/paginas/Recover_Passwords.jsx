@@ -3,13 +3,19 @@ import { useNavigate } from "react-router-dom";
 
 const [Email, setEmail] = useState("");
 const [confrmEmail, setConfirmEmail] = useState("");
+const [Token, setToken] = useState("");
 
 export default function Recover() {
+
+ const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    
+  };
 
     return(
         <div className="recover-container">
       <div className="recover-card">
-        <h1 className="recover-title">Crear Cuenta</h1>
 
         <form onSubmit={handleSubmit}>
 
