@@ -1,78 +1,30 @@
 import CardSubasta from "../componentes/cardSubasta";
 import "./home.css";
 import Appbar from "../componentes/appbar";
+
 export default function Home() {
-  /*const [subastas, setSubastas] = useState([]);
-  useEffect(() => {
-    
-    // Lógica para obtener las subastas desde el backend
-    fetch("https://tu-api.com/subastas")
-      .then((res) => res.json())
-      .then((data) => setSubastas(data))
-      .catch((error) => console.error("Error al cargar subastas:", error));
-  }, []);
-*/
   return (
     <>
-      <Appbar></Appbar>
-      <div className="card-container">
-        <CardSubasta
-          id="1"
-          titulo="Perro"
-          imagen="https://picsum.photos/400/300"
-          precio="234s"
-          fechafin="23/2/2025"
-        />
-        <CardSubasta
-          id="1"
-          titulo="Perro"
-          imagen="https://picsum.photos/400/300"
-          precio="234s"
-          fechafin="23/2/2025"
-        />
-        <CardSubasta
-          id="1"
-          titulo="Perro"
-          imagen="https://picsum.photos/400/300"
-          precio="234s"
-          fechafin="23/2/2025"
-        />
-        <CardSubasta
-          id="1"
-          titulo="Perro"
-          imagen="https://picsum.photos/400/300"
-          precio="234s"
-          fechafin="23/2/2025"
-        />
-        <CardSubasta
-          id="1"
-          titulo="Perro"
-          imagen="https://picsum.photos/400/300"
-          precio="234s"
-          fechafin="23/2/2025"
-        />
-        <CardSubasta
-          id="1"
-          titulo="Perro"
-          imagen="https://picsum.photos/400/300"
-          precio="234s"
-          fechafin="23/2/2025"
-        />
-        <CardSubasta
-          id="1"
-          titulo="Perro"
-          imagen="https://picsum.photos/400/300"
-          precio="234s"
-          fechafin="23/2/2025"
-        />
-        <CardSubasta
-          id="1"
-          titulo="Perro"
-          imagen="https://picsum.photos/400/300"
-          precio="234s"
-          fechafin="23/2/2025"
-        />
-      </div>
+      <Appbar />
+      <section className="home-container">
+        <h1 className="home-title">Subastas Disponibles</h1>
+        <p className="home-subtitle">
+          Explora los artículos disponibles y participa en las subastas activas.
+        </p>
+
+        <div className="card-container">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <CardSubasta
+              key={i}
+              id={i + 1}
+              titulo={`Artículo ${i + 1}`}
+              imagen={`https://picsum.photos/400/30${i}`}
+              precio={`${(Math.random() * 500).toFixed(2)} USD`}
+              fechafin="23/02/2025"
+            />
+          ))}
+        </div>
+      </section>
     </>
   );
 }

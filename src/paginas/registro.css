@@ -1,107 +1,268 @@
+/* === Registro.css === */
+
+body {
+  background-color: #201f1f;
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #f5f5f5;
+}
+
+.registro-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
 .registro-card {
-  background: rgb(31, 41, 99);
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-  width: 320px;
-  box-sizing: border-box; 
+  background-color: #2b2b2b;
+  padding: 45px 55px;
+  border-radius: 16px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
+  width: 420px;
+  max-width: 90%;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.registro-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 35px rgba(255, 255, 255, 0.08);
+}
+
+.registro-title {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #ffffff;
+  font-weight: 600;
+  letter-spacing: 1px;
 }
 
 .input-group {
-  margin-bottom: 1rem;
+  text-align: left;
+  margin-bottom: 20px;
 }
-
-/*Caracteristicas del titulo */
-.registro-title {
-  text-align: center;
-  color: #333;
-  margin-bottom: 1.5rem;
-  font-size: 1.6rem;
-}
-
 
 .input-group label {
   display: block;
-  font-weight: 500;
-  margin-bottom: 6px;
-  color: #444;
+  font-size: 0.95rem;
+  color: #c9c9c9;
+  margin-bottom: 8px;
 }
 
 .input-group input {
-  display: block;
   width: 100%;
-  box-sizing: border-box; 
-  padding: 10px;
-  border: 1px solid #ccc;
+  padding: 12px 15px;
+  border: 1px solid #3d3d3d;
   border-radius: 8px;
-  font-size: 0.95rem;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  background-color: #1c1c1c;
+  color: #ffffff;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.input-group input::placeholder {
+  color: #888;
 }
 
 .input-group input:focus {
-  border-color: #6366f1;
-  box-shadow: 0 0 5px rgba(99, 102, 241, 0.3);
+  border-color: #7b5cff;
+  box-shadow: 0 0 6px rgba(123, 92, 255, 0.5);
   outline: none;
 }
 
-/*Caracteristicas del boton */
 .registro-button {
-  display: block;
   width: 100%;
-  box-sizing: border-box; 
-  background-color: #04e238;
-  color: white;
-  padding: 10px;
+  background-color: #7b5cff;
+  color: #fff;
   border: none;
+  padding: 14px 0;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s;
+  margin-top: 10px;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .registro-button:hover {
-  background-color: #4f46e5;
+  background-color: #9b84ff;
+  transform: translateY(-2px);
 }
 
-/* Mensaje de instruccion */
-.token-instruction {
-  color: #555;
-  text-align: center;
-  font-size: 0.95rem;
-  margin-bottom: 1.5rem;
-  line-height: 1.4;
+/* Efecto suave al hacer clic */
+.registro-button:active {
+  transform: scale(0.97);
 }
 
-/* Campo de texto grande para token */
-.token-input {
-  width: 100%;
-  padding: 1rem;
-  font-size: 1.1rem;
-  border: 2px solid #ccc;
-  border-radius: 10px;
-  resize: none;
-  box-sizing: border-box;
+/* Animación de aparición */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.registro-card {
+  animation: fadeIn 0.4s ease;
+}
+
+/* Responsivo */
+@media (max-width: 500px) {
+  .registro-card {
+    padding: 35px 25px;
+  }
+
+  .registro-title {
+    font-size: 1.6rem;
+  }
+}
+
+/* === registro.css === */
+
+body {
+  background-color: #201f1f;
+  font-family: "Poppins", sans-serif;
+  color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+}
+
+/* Contenedor principal centrado */
+.recover-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Tarjeta del formulario */
+.recover-card {
+  background-color: #2b2b2b;
+  padding: 40px 50px;
+  border-radius: 16px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+  width: 400px;
+  max-width: 90%;
+  animation: fadeIn 0.4s ease;
+}
+
+.registro-title {
   text-align: center;
+  margin-bottom: 30px;
+  font-size: 1.8rem;
+  color: #ffffff;
   letter-spacing: 1px;
-  font-weight: 500;
-  color: #111827;
-  background: #f9fafb;
-  transition: all 0.25s ease;
 }
 
-.token-input:focus {
-  border-color: #6366f1;
-  background: white;
-  box-shadow: 0 0 8px rgba(99, 102, 241, 0.3);
+/* Grupos de entrada */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+  color: #d8d8d8;
+}
+
+.input-group input {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #3d3d3d;
+  background-color: #1c1c1c;
+  color: #ffffff;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.input-group input::placeholder {
+  color: #888;
+}
+
+.input-group input:focus {
+  border-color: #7b5cff;
+  box-shadow: 0 0 6px rgba(123, 92, 255, 0.5);
   outline: none;
 }
 
-/* Animación de entrada suave, nigga se ve elegante */
-.registro-card {
-  animation: slideUp 0.4s ease-out;
+/* Botón de enviar */
+.registro-button {
+  width: 100%;
+  background-color: #7b5cff;
+  color: #ffffff;
+  border: none;
+  padding: 14px 0;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
+.registro-button:hover {
+  background-color: #9b84ff;
+  transform: translateY(-2px);
+}
+
+.registro-button:active {
+  transform: scale(0.97);
+}
+
+/* Token generado */
+.token-display {
+  background-color: #1c1c1c;
+  margin-top: 25px;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid #3d3d3d;
+}
+
+.token-display p {
+  margin: 0 0 10px;
+  color: #b5b5b5;
+  font-size: 0.95rem;
+}
+
+.token-display span {
+  display: inline-block;
+  background-color: #7b5cff;
+  color: #fff;
+  font-weight: bold;
+  padding: 8px 14px;
+  border-radius: 6px;
+  letter-spacing: 1px;
+  box-shadow: 0 0 10px rgba(123, 92, 255, 0.5);
+}
+
+/* Animación de aparición */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsivo */
+@media (max-width: 500px) {
+  .recover-card {
+    padding: 30px 25px;
+  }
+
+  .registro-title {
+    font-size: 1.5rem;
+  }
 }

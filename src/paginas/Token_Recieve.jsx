@@ -22,7 +22,8 @@ export default function VerifyToken() {
       <div className="registro-card">
         <h2 className="registro-title">Verificar Token</h2>
         <p className="token-instruction">
-          Introduce el token de recuperación que te enviamos por correo electrónico.
+          Introduce el token de recuperación que te enviamos por correo
+          electrónico.
         </p>
 
         <form onSubmit={handleSubmit}>
