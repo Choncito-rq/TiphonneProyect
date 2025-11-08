@@ -29,8 +29,8 @@ export default function Login() {
   };
   return (
     <div className="main-container">
-      <h1>Bienvenido</h1>
       <form className="main-form" onSubmit={handleSubmit}>
+        <h1>Bienvenido</h1>
         <input
           className="main-input"
           type="email"
