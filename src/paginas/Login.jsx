@@ -8,12 +8,23 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if ((pswd == "1234") & (email === "luis@gmail.com")) {
-      alert("listo");
-      navegar("/home");
-      //token = generateToken();
-    } else {
-      alert("datos incorrectos");
+    try {
+      const response = await fetch(
+        "https://tiphonne-api-render.onrender.com/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ correo: email, contraseña: pswd }),
+        }
+      );
+      const data = await response.json();
+      if (response.ok) {
+        navegar("/home");
+      } else {
+        alert("Datos incorrectos");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
   return (
