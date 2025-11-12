@@ -69,3 +69,29 @@ body {
     font-size: 1.8rem;
   }
 }
+/* ===== Scrollbar moderna y discreta ===== */
+
+/* Para navegadores basados en WebKit (Chrome, Edge, Safari) */
+.modal-content::-webkit-scrollbar {
+  width: 6px; /* 🔹 delgada */
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: transparent; /* 🔹 sin fondo visible */
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.25); /* 🔹 gris translúcido */
+  border-radius: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.4); /* 🔹 un poco más oscuro al pasar el mouse */
+}
+
+/* Para Firefox */
+.modal-content {
+  scrollbar-width: thin; /* 🔹 delgada */
+  scrollbar-color: rgba(0, 0, 0, 0.25) transparent; /* thumb | track */
+}

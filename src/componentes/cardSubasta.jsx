@@ -1,4 +1,3 @@
-import React from "react";
 import "./CardSubasta.css";
 import { useNavigate } from "react-router-dom";
 export default function CardSubasta({ id, titulo, imagen, precio, fechafin }) {
