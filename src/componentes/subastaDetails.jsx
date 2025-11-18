@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./subastaDetails.css";
 
 export default function SubastaDetails({
@@ -10,6 +11,7 @@ export default function SubastaDetails({
   tiempo_restante,
   precio_inicial,
 }) {
+  //const [imagenPrincipal, setImagenPrincipal] = useState();
   const handlePujar = async (e) => {
     e.preventDefault();
     console.log("pujado :DDD");

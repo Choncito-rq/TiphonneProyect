@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./registro.css";
+export const nuevoToken = generarToken();
 function generarToken(longitud = 8) {
   const caracteres =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-+*_/<>";
@@ -9,6 +10,7 @@ function generarToken(longitud = 8) {
     const indiceAleatorio = Math.floor(Math.random() * caracteres.length);
     token += caracteres.charAt(indiceAleatorio);
   }
+
   return token;
 }
 
@@ -26,7 +28,6 @@ export default function Recover() {
       return;
     }
 
-    const nuevoToken = generarToken();
     setToken(nuevoToken);
     navigate("/Verify");
   };
