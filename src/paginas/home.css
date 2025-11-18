@@ -1,97 +1,103 @@
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #f8fafc;
-  font-family: "Poppins", sans-serif;
-}
-
-/* Contenedor general */
-.home-container {
-  padding: 40px 80px;
-  text-align: center;
-  animation: fadeIn 0.8s ease-in-out;
-}
-
-/* Títulos */
-.home-title {
-  font-size: 2.2rem;
-  font-weight: 700;
-  color: #ede6e6;
-  margin-bottom: 0.4rem;
-}
-
-.home-subtitle {
-  font-size: 1rem;
-  color: #555;
-  margin-bottom: 2rem;
-}
-
-/* Grid de tarjetas */
-.card-container {
+/* ===== HOME GENERAL ===== */
+.home-header {
+  margin: 20px auto;
+  width: 90%;
+  max-width: 1100px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
-  justify-content: center;
-  margin-top: 15px;
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* Cada tarjeta */
-.card-container > * {
-  flex: 1 1 280px;
-  max-width: 350px;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+.home-header h1 {
+  font-size: 2rem;
+  margin: 0;
 }
 
-.card-container > *:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+.home-header p {
+  margin: 0;
+  font-size: 1rem;
+  opacity: 0.7;
 }
 
-/* Animación de entrada */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* ===== BOTÓN DE CONFIGURACIÓN ===== */
+.config-btn {
+  background: #5c6bc0;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.2s;
 }
 
-/* Responsividad */
-@media (max-width: 768px) {
-  .home-container {
-    padding: 20px 30px;
-  }
-
-  .home-title {
-    font-size: 1.8rem;
-  }
-}
-/* ===== Scrollbar moderna y discreta ===== */
-
-/* Para navegadores basados en WebKit (Chrome, Edge, Safari) */
-.modal-content::-webkit-scrollbar {
-  width: 6px; /* 🔹 delgada */
+.config-btn:hover {
+  background: #3f4aa3;
 }
 
-.modal-content::-webkit-scrollbar-track {
-  background: transparent; /* 🔹 sin fondo visible */
+/* ===== CARDS ===== */
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  width: 90%;
+  max-width: 1100px;
+  margin: auto;
 }
 
-.modal-content::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.25); /* 🔹 gris translúcido */
-  border-radius: 10px;
-  transition: background-color 0.2s ease;
+/* ===== PANEL LATERAL ===== */
+.config-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  justify-content: flex-end;
+  z-index: 1000;
 }
 
-.modal-content::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(0, 0, 0, 0.4); /* 🔹 un poco más oscuro al pasar el mouse */
+.config-panel {
+  width: 280px;
+  background: rgb(48, 48, 48);
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.3s ease;
 }
 
-/* Para Firefox */
-.modal-content {
-  scrollbar-width: thin; /* 🔹 delgada */
-  scrollbar-color: rgba(0, 0, 0, 0.25) transparent; /* thumb | track */
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
 }
+
+.config-panel h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.config-label {
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+
+.config-options {
+  margin: 15px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.config-option {
+  padding: 10px;
+  border: none;
+  background: #e5e5ff;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.config-option:hover {
+  background: #c8c8ff;
+}
+
