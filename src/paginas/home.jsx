@@ -3,17 +3,21 @@ import "./home.css";
 import Appbar from "../componentes/appbar";
 import Modal from "../componentes/model";
 import SubastaDetails from "../componentes/subastaDetails";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { CSSTransition, SwitchTransition } from "react-transition-group";
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSubasta, setSelectedSubasta] = useState(null);
-
   const [configOpen, setConfigOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const [vista, setVista] = useState("subastas");
 
   const navigate = useNavigate();
+
+  // 🔥 Referencia para que react-transition-group NO use findDOMNode
+  const nodeRef = useRef(null);
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("user"));
@@ -44,67 +48,109 @@ export default function Home() {
     navigate("/");
   };
 
+  // ---------- CONTENIDO SEGÚN VISTA ----------
+  const renderVista = () => {
+    if (vista === "subastas") {
+      return (
+        <>
+          <section className="home-header">
+            <div>
+              <h1>Subastas Disponibles</h1>
+              <p>
+                Explora artículos interesantes y participa en pujas activas.
+              </p>
+            </div>
+          </section>
+
+          <div className="card-container">
+            {subastas.map((subasta) => (
+              <div key={subasta.id} onClick={() => handleOpen(subasta)}>
+                <CardSubasta
+                  id={subasta.id}
+                  titulo={subasta.titulo}
+                  imagen={subasta.imagen}
+                  precio={subasta.precio_inicial}
+                  fechafin={subasta.fecha_fin}
+                />
+              </div>
+            ))}
+          </div>
+        </>
+      );
+    }
+
+    if (vista === "mis-subastas") {
+      return (
+        <div className="card-container">
+          <h1>📦 Mis Subastas</h1>
+          <p>Aquí aparecerán las subastas que tú creaste.</p>
+        </div>
+      );
+    }
+
+    if (vista === "mis-pujas") {
+      return (
+        <div className="card-container">
+          <h1>💰 Mis Pujas</h1>
+          <p>Aquí aparecerán las pujas en las que participaste.</p>
+        </div>
+      );
+    }
+  };
+
   return (
     <>
-      {/* Barra superior */}
-      <Appbar />
+      <Appbar
+        configOpen={configOpen}
+        setConfigOpen={setConfigOpen}
+        user={user}
+      />
 
-      {/* Encabezado bonito */}
-      <section className="home-header">
-        <div>
-          <h1>Subastas Disponibles</h1>
-          <p>Explora artículos interesantes y participa en pujas activas.</p>
-        </div>
-
-        {/* Botón de configuración */}
+      {/* ---------- NAV SUPERIOR ---------- */}
+      <nav className="home-nav">
         <button
-          className="config-btn"
-          onClick={() => setConfigOpen(true)}
+          className={vista === "subastas" ? "active" : ""}
+          onClick={() => setVista("subastas")}
         >
-          Menu ⚙ 
+          Subastas
         </button>
-      </section>
 
-      {/* Cards */}
-      <div className="card-container">
-        {subastas.map((subasta) => (
-          <div key={subasta.id} onClick={() => handleOpen(subasta)}>
-            <CardSubasta
-              id={subasta.id}
-              titulo={subasta.titulo}
-              imagen={subasta.imagen}
-              precio={subasta.precio_inicial}
-              fechafin={subasta.fecha_fin}
-            />
-          </div>
-        ))}
+        <button
+          className={vista === "mis-subastas" ? "active" : ""}
+          onClick={() => setVista("mis-subastas")}
+        >
+          Mis Subastas
+        </button>
+
+        <button
+          className={vista === "mis-pujas" ? "active" : ""}
+          onClick={() => setVista("mis-pujas")}
+        >
+          Mis Pujas
+        </button>
+      </nav>
+
+      {/* ---------- CONTENIDO con FADE SUAVE ---------- */}
+      <div className="home-content">
+        <SwitchTransition>
+          <CSSTransition
+            key={vista}
+            timeout={300}
+            classNames="fade"
+            unmountOnExit
+            nodeRef={nodeRef} // 🔥 evita error findDOMNode
+          >
+            <div ref={nodeRef} className="vista fade-content">
+              {renderVista()}
+            </div>
+          </CSSTransition>
+        </SwitchTransition>
       </div>
 
-      {/* Modal de detalles */}
+      {/* ---------- MODAL ---------- */}
       <Modal isOpen={isOpen} onClose={handleClose}>
         {selectedSubasta && <SubastaDetails {...selectedSubasta} />}
       </Modal>
-
-      {/* PANEL LATERAL DE CONFIGURACIÓN */}
-      {configOpen && (
-        <div className="config-overlay" onClick={() => setConfigOpen(false)}>
-          <div
-            className="config-panel"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2>⚙ Configuración</h2>
-
-            <p className="config-label">
-              <strong>Usuario:</strong> {user?.nombre || "Invitado"}
-            </p>
-
-            <p className="config-label">
-              <strong>Correo:</strong> {user?.correo || "Desconocido"}
-            </p>
-
-          </div>
-        </div>
-      )}
     </>
   );
 }
