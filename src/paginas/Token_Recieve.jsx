@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { nuevoToken } from "./Recover_Passwords";
+
+
 export default function VerifyToken() {
   const [token, setToken] = useState("");
   const navigate = useNavigate();
@@ -9,14 +11,14 @@ export default function VerifyToken() {
     e.preventDefault();
 
     if (token === "") {
-      alert("Por favor ingrese el token de verificación");
+      alert("Coloque su token");
       return;
     }
-    if (nuevoToken === token) {
-      navigate();
+    if (nuevoToken.trim == token.trim) {
+      
+      navigate("/Recovered/NewPassword");
     }
-    console.log("Token ingresado:", token);
-    //Aqui va el otro merequetenge
+
   };
 
   return (
