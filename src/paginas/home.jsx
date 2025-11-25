@@ -81,18 +81,35 @@ export default function Home() {
 
     if (vista === "mis-subastas") {
       return (
-        <div className="card-container">
-          <h1>📦 Mis Subastas</h1>
-          <p>Aquí aparecerán las subastas que tú creaste.</p>
-        </div>
+        <section>
+          <section className="home-header">
+            <div>
+              <h1>Tus Subastas</h1>
+              <p>Subastas que has creado</p>
+            </div>
+          </section>
+          <div className="card-container">
+            {subastas.map((subasta) => (
+              <div key={subasta.id} onClick={() => handleOpen(subasta)}>
+                <CardSubasta
+                  id={subasta.id}
+                  titulo={subasta.titulo}
+                  imagen={subasta.imagen}
+                  precio={subasta.precio_inicial}
+                  fechafin={subasta.fecha_fin}
+                />
+              </div>
+            ))}
+          </div>
+        </section>
       );
     }
 
     if (vista === "mis-pujas") {
       return (
         <div className="card-container">
-          <h1>💰 Mis Pujas</h1>
-          <p>Aquí aparecerán las pujas en las que participaste.</p>
+          <h1>Mis Pujas</h1>
+          <p>Aqui aparecen subastas que estas participando</p>
         </div>
       );
     }
@@ -106,31 +123,31 @@ export default function Home() {
         user={user}
       />
 
-      {/* ---------- NAV SUPERIOR ---------- */}
       <nav className="home-nav">
-        <button
-          className={vista === "subastas" ? "active" : ""}
-          onClick={() => setVista("subastas")}
-        >
-          Subastas
-        </button>
+        <div className="nav-box">
+          <button
+            className={vista === "subastas" ? "active" : ""}
+            onClick={() => setVista("subastas")}
+          >
+            Subastas
+          </button>
 
-        <button
-          className={vista === "mis-subastas" ? "active" : ""}
-          onClick={() => setVista("mis-subastas")}
-        >
-          Mis Subastas
-        </button>
+          <button
+            className={vista === "mis-subastas" ? "active" : ""}
+            onClick={() => setVista("mis-subastas")}
+          >
+            Mis Subastas
+          </button>
 
-        <button
-          className={vista === "mis-pujas" ? "active" : ""}
-          onClick={() => setVista("mis-pujas")}
-        >
-          Mis Pujas
-        </button>
+          <button
+            className={vista === "mis-pujas" ? "active" : ""}
+            onClick={() => setVista("mis-pujas")}
+          >
+            Mis Pujas
+          </button>
+        </div>
       </nav>
 
-      {/* ---------- CONTENIDO con FADE SUAVE ---------- */}
       <div className="home-content">
         <SwitchTransition>
           <CSSTransition
@@ -138,7 +155,7 @@ export default function Home() {
             timeout={300}
             classNames="fade"
             unmountOnExit
-            nodeRef={nodeRef} // 🔥 evita error findDOMNode
+            nodeRef={nodeRef}
           >
             <div ref={nodeRef} className="vista fade-content">
               {renderVista()}
@@ -147,7 +164,6 @@ export default function Home() {
         </SwitchTransition>
       </div>
 
-      {/* ---------- MODAL ---------- */}
       <Modal isOpen={isOpen} onClose={handleClose}>
         {selectedSubasta && <SubastaDetails {...selectedSubasta} />}
       </Modal>

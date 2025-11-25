@@ -124,6 +124,7 @@
   justify-content: center;
   gap: 15px;
   margin-top: 15px;
+  
 }
 
 .home-nav button {
@@ -134,7 +135,7 @@
   border-radius: 8px;
   font-size: 15px;
   cursor: pointer;
-  transition: background 0.25s;
+  transition:  0.25s;
 }
 
 .home-nav button.active {
@@ -147,7 +148,13 @@
   background: #ddd;
   color: black;
 }
-
+.nav-box {
+  display: flex;
+  gap: 15px;
+  padding: 10px 15px;
+  border: 2px solid white;
+  border-radius: 10px;
+}
 
 /* ===========================
    🔷 CONTENEDOR PRINCIPAL
@@ -155,14 +162,14 @@
 .home-content {
   position: relative;
   width: 100%;
-  height: 75vh;   /* ❗ YA NO min-height, ahora altura fija */
+  height: 75vh;  
   padding: 20px;
   overflow: hidden;
 }
 
 .vista {
   width: 100%;
-  height: 100%;   /* ❗ La vista siempre ocupa el mismo espacio */
+  height: 100%;   
   overflow-y: auto;
   display: flex;
   flex-direction: column;
