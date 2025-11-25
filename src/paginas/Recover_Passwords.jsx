@@ -29,6 +29,19 @@ export default function Recover() {
     }
 
     setToken(nuevoToken);
+
+   await fetch("http://localhost:4000/send-token", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    email,
+    token: nuevoToken
+  })
+});
+
+
     navigate("/Verify");
   };
 
@@ -65,12 +78,6 @@ export default function Recover() {
           </button>
         </form>
 
-        {token && (
-          <div className="token-display">
-            <p>Tu token de recuperación es:</p>
-            <span>{token}</span>
-          </div>
-        )}
       </div>
     </div>
   );

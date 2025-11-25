@@ -46,7 +46,7 @@ export default function VerifyToken() {
           </div>
 
           <button type="submit" className="registro-button">
-            Ingresar Nueva Contraseña
+            Ingresar Contraseña
           </button>
         </form>
 
