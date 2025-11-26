@@ -2,19 +2,45 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./registro.css";
 
-export default function VerifyToken() {
-  const [Contraseña, setContraseña] = useState("");
-  const [ConfirmContraseña, setConfirmContraseña] = useState("");
+export default function NewPassword() {
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (Contraseña !== ConfirmContraseña) {
+    if (password !== confirmPassword) {
       alert("Las contraseñas no coinciden");
       return;
     }
 
+    const email = localStorage.getItem("Email");
+
+    const body = {
+      correo: email,
+      nueva_contraseña: password
+    };
+
+    try {
+      const resp = await fetch("http://localhost:5173/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      const data = await resp.json();
+
+      if (resp.ok) {
+        console.log("Contraseña actualizada");
+        navigate("/");
+      } else {
+        alert("Error: " + (data.error || "No se pudo actualizar la contraseña"));
+      }
+    } catch (err) {
+      console.log("Error enviando datos:", err);
+      alert("No se pudo conectar con el servidor");
+    }
   };
 
   return (
@@ -26,9 +52,9 @@ export default function VerifyToken() {
           <div className="input-group">
             <label>Contraseña</label>
             <input
-              type="email"
-              value={Contraseña}
-              onChange={(e) => setEmail(e.target.value)}
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="**********"
               required
             />
@@ -37,19 +63,18 @@ export default function VerifyToken() {
           <div className="input-group">
             <label>Confirmar Contraseña</label>
             <input
-              type="email"
-              value={ConfirmContraseña}
-              onChange={(e) => setConfirmEmail(e.target.value)}
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="**********"
               required
             />
           </div>
 
           <button type="submit" className="registro-button">
-            Ingresar Contraseña
+            Guardar Nueva Contraseña
           </button>
         </form>
-
       </div>
     </div>
   );

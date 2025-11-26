@@ -4,7 +4,7 @@ import "./registro.css";
 export const nuevoToken = generarToken();
 function generarToken(longitud = 8) {
   const caracteres =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-+*_/<>";
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-+*_/<>(){}";
   let token = "";
   for (let i = 0; i < longitud; i++) {
     const indiceAleatorio = Math.floor(Math.random() * caracteres.length);
@@ -29,6 +29,8 @@ export default function Recover() {
     }
 
     setToken(nuevoToken);
+
+    localStorage.setItem("Email", email);
 
    await fetch("http://localhost:4000/send-token", {
   method: "POST",
