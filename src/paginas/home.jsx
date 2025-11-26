@@ -14,24 +14,34 @@ export default function Home() {
   const [user, setUser] = useState(null);
   const [vista, setVista] = useState("subastas");
 
-  const navigate = useNavigate();
+  const [subastas, setSubastas] = useState([]); // <-- ESTADO REAL
 
-  // 🔥 Referencia para que react-transition-group NO use findDOMNode
+  const navigate = useNavigate();
   const nodeRef = useRef(null);
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("user"));
     setUser(data);
+
+    cargarSubastas(); // <-- DEBES LLAMARLA AL INICIO
   }, []);
 
-  // Datos simulados
-  const subastas = Array.from({ length: 8 }).map((_, i) => ({
-    id: i + 1,
-    titulo: `Artículo ${i + 1}`,
-    imagen: `https://picsum.photos/400/30${i}`,
-    precio_inicial: `${(Math.random() * 500).toFixed(2)} USD`,
-    fecha_fin: "23/02/2025",
-  }));
+  async function cargarSubastas() {
+    const response = await fetch(
+      "https://tiphonne-api-render.onrender.com/subastas"
+    );
+    const data = await response.json();
+
+    const formato = data.map((s) => ({
+      id: s.id_subasta,
+      titulo: s.descripcion,
+      imagen: s.imagenes?.[0] ?? null, // <-- CORRECTO
+      precio_inicial: s.puja_actual?.monto ?? s.precio_base,
+      fecha_fin: s.fecha_fin,
+    }));
+
+    setSubastas(formato); // <-- AHORA SÍ ACTUALIZA LA UI
+  }
 
   const handleOpen = (subasta) => {
     setSelectedSubasta(subasta);
@@ -48,7 +58,6 @@ export default function Home() {
     navigate("/");
   };
 
-  // ---------- CONTENIDO SEGÚN VISTA ----------
   const renderVista = () => {
     if (vista === "subastas") {
       return (
