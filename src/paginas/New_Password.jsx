@@ -23,7 +23,7 @@ export default function NewPassword() {
     };
 
     try {
-      const resp = await fetch("http://localhost:5173/reset-password", {
+      const resp = await fetch("https://tiphonne-api-render.onrender.com/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
