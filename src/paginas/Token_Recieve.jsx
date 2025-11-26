@@ -8,18 +8,22 @@ export default function VerifyToken() {
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (token === "") {
-      alert("Coloque su token");
-      return;
-    }
-    if (nuevoToken.trim == token.trim) {
-      
-      navigate("/Recovered/NewPassword");
-    }
+  if (token === "") {
+    alert("Coloque su token");
+    return;
+  }
 
-  };
+  const tokenGuardado = localStorage.getItem("token_recuperacion");
+
+  if (tokenGuardado && tokenGuardado.trim() === token.trim()) {
+    navigate("/Recovered/NewPassword");
+  } else {
+    console.log("Token incorrecto");
+  }
+};
+
 
   return (
     <div className="recover-container">

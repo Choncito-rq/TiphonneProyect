@@ -17,7 +17,6 @@ function generarToken(longitud = 8) {
 export default function Recover() {
   const [email, setEmail] = useState("");
   const [confirmEmail, setConfirmEmail] = useState("");
-  const [token, setToken] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -28,24 +27,20 @@ export default function Recover() {
       return;
     }
 
-    setToken(nuevoToken);
-
+    const nuevoToken = generarToken();
     localStorage.setItem("Email", email);
+    localStorage.setItem("token_recuperacion", nuevoToken);
 
-   await fetch("http://localhost:4000/send-token", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    email,
-    token: nuevoToken
-  })
-});
-
+    await fetch("http://localhost:4000/send-token", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, token: nuevoToken }),
+    });
 
     navigate("/Verify");
   };
+
+
 
   return (
     <div className="recover-container">
