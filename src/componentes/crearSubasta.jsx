@@ -10,6 +10,7 @@ export default function CrearSubasta() {
   const [imagenesPreview, setImagenesPreview] = useState([]);
   const [imagenesFiles, setImagenesFiles] = useState([]);
   const [subiendo, setSubiendo] = useState(false);
+  const [titulo, setTitulo] = useState("");
 
   // ============================================================
   //               FUNCIÓN DE SUBIDA A CLOUDINARY
@@ -54,9 +55,6 @@ export default function CrearSubasta() {
     setImagenesFiles((prev) => [...prev, ...files]);
   };
 
-  // ============================================================
-  //               ELIMINAR UNA IMAGEN PREVIEW
-  // ============================================================
   const eliminarImagen = (index) => {
     setImagenesPreview((prev) => prev.filter((_, i) => i !== index));
     setImagenesFiles((prev) => prev.filter((_, i) => i !== index));
@@ -94,11 +92,14 @@ export default function CrearSubasta() {
     };
 
     try {
-      const res = await fetch("http://localhost:3000/api/subastas", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+      const res = await fetch(
+        "https://tiphonne-api-render.onrender.com/subastas",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        }
+      );
 
       const json = await res.json();
       console.log("Subasta creada:", json);
@@ -118,7 +119,14 @@ export default function CrearSubasta() {
         <div className="perfil-header">
           <h2>Crear Subasta</h2>
         </div>
-
+        <div className="input-group">
+          <label>Título de la subasta</label>
+          <input
+            type="text"
+            value={titulo}
+            onChange={(e) => setTitulo(e.target.value)}
+          />
+        </div>
         <div className="input-group">
           <label>Descripción</label>
           <textarea

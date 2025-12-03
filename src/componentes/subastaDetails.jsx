@@ -10,32 +10,39 @@ export default function SubastaDetails({
   precio_base,
   puja_actual,
   imagenes,
+  iduser,
 }) {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [monto, setMonto] = useState("");
-  const [id, setId] = useState(null);
+  const [id, setId] = useState("iudas");
   const [imagenActual, setImagenActual] = useState(
     imagenes[0] || "https://picsum.photos/400/300"
   );
 
- useEffect(() => {
+  useEffect(() => {
     const stored = localStorage.getItem("iduser");
+    console.log(stored);
     setId(stored);
   }, []);
 
   const handlePujar = async () => {
-
+    alert(iduser);
     try {
-      const response = await fetch("http://tu-servidor.com/subastas/${idSubasta}/pujas", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id_usuario_pujador: id,
-          id_subasta: id_subasta,
-          monto: monto,
-        }),
-
-      });
+      console.log("monto" + monto);
+      console.log("id" + id);
+      console.log("id subasta" + id_subasta);
+      const response = await fetch(
+        "http://tu-servidor.com/subastas/${idSubasta}/pujas",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id_usuario_pujador: id,
+            id_subasta: id_subasta,
+            monto: monto,
+          }),
+        }
+      );
 
       const data = await response.json();
       console.log("Puja enviada:", data);

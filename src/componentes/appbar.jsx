@@ -2,7 +2,7 @@ import menuIcon from "../assets/menusss.svg";
 import { useNavigate } from "react-router-dom";
 import "./appbar.css";
 
-export default function Appbar({ configOpen, setConfigOpen, user }) {
+export default function Appbar({ configOpen, setConfigOpen, user, userid }) {
   const navigate = useNavigate();
 
   return (

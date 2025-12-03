@@ -34,8 +34,9 @@ export default function Login() {
             usuario: data.usuario,
           })
         );
-        localStorage.setItem("iduser", data.id);
+
         localStorage.setItem("token", data.token); // Falta que el backend genere el token
+
         navegar("/home"); //si hay una respuesta, si hay contenido, voy al home(pagina principal)
       } else {
         alert("Datos incorrectos");
