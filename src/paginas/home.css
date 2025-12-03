@@ -152,8 +152,7 @@
   display: flex;
   gap: 15px;
   padding: 10px 15px;
-  border: 2px solid white;
-  border-radius: 10px;
+  
 }
 
 /* ===========================
@@ -200,3 +199,4 @@
   opacity: 0;
   transition: opacity 300ms ease;
 }
+

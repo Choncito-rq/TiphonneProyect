@@ -16,3 +16,83 @@
 .appbar nav a:hover {
   text-decoration: underline;
 }
+
+/* ====== OVERLAY ====== */
+.config-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: flex-end;
+  z-index: 999;
+}
+
+/* ====== PANEL LATERAL ====== */
+.config-panel {
+  background: #121417;
+  width: 330px;
+  height: 100vh;
+  padding: 25px;
+  overflow-y: auto;
+  box-shadow: -4px 0 20px rgba(0,0,0,0.4);
+  animation: slide 0.25s ease-out;
+  color: #e4e4e4;
+}
+
+@keyframes slide {
+  from { transform: translateX(80px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* TITULOS */
+.config-panel h2 {
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.config-section h3 {
+  font-size: 1rem;
+  color: #bbbbbb;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 5px;
+}
+
+/* ====== BOTONES ====== */
+.config-btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin: 6px 0;
+  border: none;
+  background: #1b1e23;
+  color: #d9d9d9;
+  cursor: pointer;
+  border-radius: 8px;
+  text-align: left;
+  transition: 0.18s ease;
+}
+
+.config-btn:hover {
+  background: #2a2f36;
+  transform: translateX(3px);
+}
+
+/* ====== LOGOUT ====== */
+.logout-btn {
+  background: #b43434;
+  color: white;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: 0.18s ease;
+}
+
+.logout-btn:hover {
+  background: #992b2b;
+  transform: translateY(-2px);
+}

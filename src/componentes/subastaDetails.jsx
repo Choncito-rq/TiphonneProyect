@@ -2,53 +2,129 @@ import { useState } from "react";
 import "./subastaDetails.css";
 
 export default function SubastaDetails({
-  titulo,
-  imagen,
-  puja_actual,
-  fecha_fin,
+  id_subasta,
   descripcion,
-  fecha_inicio,
-  tiempo_restante,
-  precio_inicial,
+  fecha_ini,
+  fecha_fin,
+  precio_base,
+  puja_actual,
+  imagenes,
 }) {
-  //const [imagenPrincipal, setImagenPrincipal] = useState();
-  const handlePujar = async (e) => {
-    e.preventDefault();
-    console.log("pujado :DDD");
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [monto, setMonto] = useState("");
+  const [imagenActual, setImagenActual] = useState(
+    imagenes[0] || "https://picsum.photos/400/300"
+  );
+
+  const handlePujar = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/pujar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id_subasta,
+          monto,
+          id_usuario_pujador: 2,
+        }),
+      });
+
+      const data = await response.json();
+      console.log("Puja enviada:", data);
+
+      alert("Puja realizada correctamente");
+      setMostrarModal(false);
+    } catch (error) {
+      console.error(error);
+      alert("Error al pujar");
+    }
+  };
+
+  const cambiarImagen = (src) => {
+    setImagenActual(src);
   };
 
   return (
-    <article className="auction-details">
-      <div className="auction-left">
-        <div className="main-image">
-          <img src={imagen} alt={titulo} />
-        </div>
-        <div className="image-thumbs">
-          {[1, 2, 3].map((i) => (
-            <img key={i} src={`https://picsum.photos/100/10${i}`} alt="mini" />
-          ))}
-        </div>
-      </div>
+    <>
+      <article className="auction-details">
+        <div className="auction-left">
+          <div className="main-image">
+            <img src={imagenActual} alt="Imagen principal" />
+          </div>
 
-      <div className="auction-right">
-        <h2>{titulo}</h2>
-        <p className="current-bid">
-          Puja actual: <span>{puja_actual}</span>
-        </p>
-        <p className="starting-bid">Precio inicial: {precio_inicial}</p>
-        <div className="timer">⏰ {tiempo_restante}</div>
-
-        <div className="bid-actions">
-          <button className="primary-btn">Pujar</button>
-          <button className="secondary-btn">Historial</button>
+          <div className="image-thumbs">
+            {imagenes.length > 0
+              ? imagenes.map((img, i) => (
+                  <img
+                    key={i}
+                    src={img}
+                    alt="mini"
+                    onClick={() => cambiarImagen(img)}
+                    className="thumb-img"
+                  />
+                ))
+              : [1, 2, 3].map((i) => (
+                  <img
+                    key={i}
+                    src={`https://picsum.photos/100/10${i}`}
+                    alt="mini"
+                    onClick={() =>
+                      cambiarImagen(`https://picsum.photos/400/30${i}`)
+                    }
+                    className="thumb-img"
+                  />
+                ))}
+          </div>
         </div>
 
-        <p className="description">{descripcion}</p>
-        <p className="dates">
-          <span>Inicio:</span> {fecha_inicio} <br />
-          <span>Fin:</span> {fecha_fin}
-        </p>
-      </div>
-    </article>
+        <div className="auction-right">
+          <h2>Subasta #{id_subasta}</h2>
+
+          <p className="current-bid">
+            Puja actual: <span>{puja_actual?.monto || precio_base}</span>
+          </p>
+
+          <p>Precio base: {precio_base}</p>
+
+          <div className="bid-actions">
+            <button
+              className="primary-btn"
+              onClick={() => setMostrarModal(true)}
+            >
+              Pujar
+            </button>
+            <button className="secondary-btn">Historial</button>
+          </div>
+
+          <p className="description">{descripcion}</p>
+          <p className="dates">
+            <span>Inicio:</span> {fecha_ini} <br />
+            <span>Fin:</span> {fecha_fin}
+          </p>
+        </div>
+      </article>
+
+      {mostrarModal && (
+        <div className="modal-backdrop">
+          <div className="modal">
+            <h3>Realizar puja</h3>
+            <input
+              type="number"
+              value={monto}
+              onChange={(e) => setMonto(e.target.value)}
+              placeholder="Ingresa tu oferta"
+            />
+            <button className="primary-btn" onClick={handlePujar}>
+              Confirmar
+            </button>
+            <button
+              className="secondary-btn"
+              onClick={() => setMostrarModal(false)}
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

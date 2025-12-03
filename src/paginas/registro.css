@@ -227,3 +227,12 @@ button:disabled {
   box-shadow: 0 28px 70px rgba(0, 0, 0, 0.72);
   transition: .25s ease;
 }
+.spinner{
+  width: 18px;
+  height: 18px;
+  border: 3px solid #fff;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation:spin .8s linear infinte;
+  margin: auto;
+}

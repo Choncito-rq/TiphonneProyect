@@ -11,21 +11,21 @@ export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSubasta, setSelectedSubasta] = useState(null);
   const [configOpen, setConfigOpen] = useState(false);
-  const [user, setUser] = useState(null);
+  const [usuario, setUsuario] = useState(null);
   const [vista, setVista] = useState("subastas");
 
-  const [subastas, setSubastas] = useState([]); // <-- ESTADO REAL
+  const [subastas, setSubastas] = useState([]);
 
   const navigate = useNavigate();
   const nodeRef = useRef(null);
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("user"));
-    setUser(data);
-
-    cargarSubastas(); // <-- DEBES LLAMARLA AL INICIO
+    const stored = localStorage.getItem("user");
+    const usuario = stored ? JSON.parse(stored) : null;
+    setUsuario(usuario);
   }, []);
 
+  // ⬇⬇⬇ COMPLETAMENTE CORREGIDO
   async function cargarSubastas() {
     const response = await fetch(
       "https://tiphonne-api-render.onrender.com/subastas"
@@ -35,14 +35,22 @@ export default function Home() {
     const formato = data.map((s) => ({
       id: s.id_subasta,
       titulo: s.descripcion,
-      imagen: s.imagenes?.[0] ?? null, // <-- CORRECTO
+      descripcion: s.descripcion,
+      imagenes: s.imagenes ?? [],
+      imagen: s.imagenes?.[0] ?? null,
       precio_inicial: s.puja_actual?.monto ?? s.precio_base,
+      precio_base: s.precio_base,
+      puja_actual: s.puja_actual,
+      fecha_inicio: s.fecha_ini,
       fecha_fin: s.fecha_fin,
+      creador: s.id_usuario_creador,
     }));
 
-    setSubastas(formato); // <-- AHORA SÍ ACTUALIZA LA UI
+    setSubastas(formato);
   }
+  // ⬆⬆⬆ COMPLETAMENTE CORREGIDO
 
+  // Ya NO hace fetch (NO existe /subastas/:id), solo abre modal
   const handleOpen = (subasta) => {
     setSelectedSubasta(subasta);
     setIsOpen(true);
@@ -97,6 +105,7 @@ export default function Home() {
               <p>Subastas que has creado</p>
             </div>
           </section>
+
           <div className="card-container">
             {subastas.map((subasta) => (
               <div key={subasta.id} onClick={() => handleOpen(subasta)}>
@@ -118,7 +127,7 @@ export default function Home() {
       return (
         <div className="card-container">
           <h1>Mis Pujas</h1>
-          <p>Aqui aparecen subastas que estas participando</p>
+          <p>Aquí aparecen subastas donde participas.</p>
         </div>
       );
     }
@@ -129,7 +138,7 @@ export default function Home() {
       <Appbar
         configOpen={configOpen}
         setConfigOpen={setConfigOpen}
-        user={user}
+        user={usuario}
       />
 
       <nav className="home-nav">
@@ -173,6 +182,7 @@ export default function Home() {
         </SwitchTransition>
       </div>
 
+      {/* MODAL DE DETALLES */}
       <Modal isOpen={isOpen} onClose={handleClose}>
         {selectedSubasta && <SubastaDetails {...selectedSubasta} />}
       </Modal>

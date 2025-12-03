@@ -5,14 +5,14 @@ import { useNavigate } from "react-router-dom";
 export default function Registro_nuevo() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [apellido, setApellido] = useState("");
   const navegar = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     if (password !== confirmPassword) {
       alert("Las contraseñas no coinciden.");
       return;
@@ -42,6 +42,8 @@ export default function Registro_nuevo() {
     } catch (error) {
       console.error("Error en la conexión:", error);
       alert("Hubo un problema con el servidor.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -105,8 +107,8 @@ export default function Registro_nuevo() {
             />
           </div>
 
-          <button type="submit" className="registro-button">
-            Registrarse
+          <button type="submit" className="registro-button" disabled={loading}>
+            {loading ? <div className="spinner"></div> : "Registrarme"}
           </button>
         </form>
       </div>

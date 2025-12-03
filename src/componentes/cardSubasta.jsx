@@ -1,6 +1,13 @@
 import "./CardSubasta.css";
 import { useNavigate } from "react-router-dom";
-export default function CardSubasta({ id, titulo, imagen, precio, fechafin }) {
+export default function CardSubasta({
+  id,
+  titulo,
+  imagen,
+  precio,
+  fechafin,
+  fecha_inicial,
+}) {
   const navegar = useNavigate();
 
   return (
