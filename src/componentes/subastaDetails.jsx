@@ -13,14 +13,15 @@ export default function SubastaDetails({
 }) {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [monto, setMonto] = useState("");
-  const [id, setId] = useState(null);
+  const [user, setUser] = useState(null);
   const [imagenActual, setImagenActual] = useState(
     imagenes[0] || "https://picsum.photos/400/300"
   );
 
- useEffect(() => {
-    const stored = localStorage.getItem("iduser");
-    setId(stored);
+  useEffect(() => {
+    const stored = localStorage.getItem("user");
+    const userParsed = stored ? JSON.parse(stored) : null;
+    setUser(userParsed);
   }, []);
 
   const handlePujar = async () => {
@@ -30,13 +31,12 @@ export default function SubastaDetails({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          id_usuario_pujador: id,
+          id_usuario_pujador: user?.usuario?.id,
           id_subasta: id_subasta,
           monto: monto,
         }),
 
       });
-
       const data = await response.json();
       console.log("Puja enviada:", data);
 
