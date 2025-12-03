@@ -5,6 +5,9 @@ import Recover from "./paginas/Recover_Passwords.jsx";
 import VerifyToken from "./paginas/Token_Recieve.jsx";
 import Home from "./paginas/home.jsx";
 import New from "./paginas/New_Password.jsx";
+import EditarPerfil from "./componentes/editarperfil.jsx";
+import CrearSubasta from "./componentes/crearSubasta.jsx";
+
 import "./App.css";
 
 export default function App() {
@@ -17,6 +20,8 @@ export default function App() {
         <Route path="/Recovered/NewPassword" element={<New />} />
         <Route path="/Recovered" element={<Recover />} />
         <Route path="/home" element={<Home />}></Route>
+        <Route path="/editar-perfil" element={<EditarPerfil />}></Route>
+        <Route path="/crear-subasta" element={<CrearSubasta />}></Route>
       </Routes>
     </BrowserRouter>
   );

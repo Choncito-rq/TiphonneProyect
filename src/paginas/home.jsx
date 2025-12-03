@@ -3,7 +3,7 @@ import "./home.css";
 import Appbar from "../componentes/appbar";
 import Modal from "../componentes/model";
 import SubastaDetails from "../componentes/subastaDetails";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 
@@ -17,15 +17,23 @@ export default function Home() {
   const [subastas, setSubastas] = useState([]);
 
   const navigate = useNavigate();
-  const nodeRef = useRef(null);
 
+  // ===============================
+  // CARGAR USUARIO
+  // ===============================
   useEffect(() => {
     const stored = localStorage.getItem("user");
-    const usuario = stored ? JSON.parse(stored) : null;
-    setUsuario(usuario);
+    const userParsed = stored ? JSON.parse(stored) : null;
+    setUsuario(userParsed);
   }, []);
 
-  // ⬇⬇⬇ COMPLETAMENTE CORREGIDO
+  // ===============================
+  // CARGAR SUBASTAS
+  // ===============================
+  useEffect(() => {
+    cargarSubastas();
+  }, []);
+
   async function cargarSubastas() {
     const response = await fetch(
       "https://tiphonne-api-render.onrender.com/subastas"
@@ -48,9 +56,10 @@ export default function Home() {
 
     setSubastas(formato);
   }
-  // ⬆⬆⬆ COMPLETAMENTE CORREGIDO
 
-  // Ya NO hace fetch (NO existe /subastas/:id), solo abre modal
+  // ===============================
+  // MODAL DE DETALLES
+  // ===============================
   const handleOpen = (subasta) => {
     setSelectedSubasta(subasta);
     setIsOpen(true);
@@ -61,11 +70,17 @@ export default function Home() {
     setIsOpen(false);
   };
 
+  // ===============================
+  // LOGOUT
+  // ===============================
   const logout = () => {
     localStorage.removeItem("user");
-    navigate("/");
+    navigate("/", { replace: true }); // evita regresar con botón atrás
   };
 
+  // ===============================
+  // CAMBIO DE VISTA
+  // ===============================
   const renderVista = () => {
     if (vista === "subastas") {
       return (
@@ -97,47 +112,59 @@ export default function Home() {
     }
 
     if (vista === "mis-subastas") {
+      const mias = subastas.filter((s) => s.creador === usuario?.id);
+
       return (
-        <section>
+        <>
           <section className="home-header">
             <div>
               <h1>Tus Subastas</h1>
-              <p>Subastas que has creado</p>
+              <p>Subastas creadas por ti.</p>
             </div>
           </section>
 
           <div className="card-container">
-            {subastas.map((subasta) => (
-              <div key={subasta.id} onClick={() => handleOpen(subasta)}>
-                <CardSubasta
-                  id={subasta.id}
-                  titulo={subasta.titulo}
-                  imagen={subasta.imagen}
-                  precio={subasta.precio_inicial}
-                  fechafin={subasta.fecha_fin}
-                />
-              </div>
-            ))}
+            {mias.length === 0 ? (
+              <p style={{ textAlign: "center", width: "100%" }}>
+                No tienes subastas creadas.
+              </p>
+            ) : (
+              mias.map((subasta) => (
+                <div key={subasta.id} onClick={() => handleOpen(subasta)}>
+                  <CardSubasta
+                    id={subasta.id}
+                    titulo={subasta.titulo}
+                    imagen={subasta.imagen}
+                    precio={subasta.precio_inicial}
+                    fechafin={subasta.fecha_fin}
+                  />
+                </div>
+              ))
+            )}
           </div>
-        </section>
+        </>
       );
     }
 
     if (vista === "mis-pujas") {
       return (
-        <div className="card-container">
+        <section className="home-header">
           <h1>Mis Pujas</h1>
           <p>Aquí aparecen subastas donde participas.</p>
-        </div>
+        </section>
       );
     }
   };
 
+  // ===============================
+  // RENDER PRINCIPAL
+  // ===============================
   return (
     <>
       <Appbar
         configOpen={configOpen}
         setConfigOpen={setConfigOpen}
+        logout={logout}
         user={usuario}
       />
 
@@ -173,18 +200,20 @@ export default function Home() {
             timeout={300}
             classNames="fade"
             unmountOnExit
-            nodeRef={nodeRef}
           >
-            <div ref={nodeRef} className="vista fade-content">
-              {renderVista()}
-            </div>
+            <div className="vista fade-content">{renderVista()}</div>
           </CSSTransition>
         </SwitchTransition>
       </div>
 
       {/* MODAL DE DETALLES */}
       <Modal isOpen={isOpen} onClose={handleClose}>
-        {selectedSubasta && <SubastaDetails {...selectedSubasta} />}
+        {selectedSubasta && (
+          <SubastaDetails
+            {...selectedSubasta}
+            imagenes={selectedSubasta?.imagenes ?? []}
+          />
+        )}
       </Modal>
     </>
   );

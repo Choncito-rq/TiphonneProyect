@@ -1,7 +1,6 @@
 import menuIcon from "../assets/menusss.svg";
 import { useNavigate } from "react-router-dom";
 import "./appbar.css";
-import { useEffect } from "react";
 
 export default function Appbar({ configOpen, setConfigOpen, user }) {
   const navigate = useNavigate();
@@ -38,7 +37,13 @@ export default function Appbar({ configOpen, setConfigOpen, user }) {
                 {user?.usuario?.correo || "Desconocido"}
               </p>
 
-              <button className="config-btn">Editar perfil</button>
+              <button
+                className="config-btn"
+                onClick={() => navigate("/editar-perfil")}
+              >
+                Editar perfil
+              </button>
+
               <button className="config-btn">Cambiar contraseña</button>
             </section>
 
@@ -46,21 +51,22 @@ export default function Appbar({ configOpen, setConfigOpen, user }) {
             <section className="config-section">
               <h3>Mis Subastas</h3>
 
-              <button className="config-btn">Mis pujas activas</button>
-              <button className="config-btn">Subastas ganadas</button>
-              <button className="config-btn">Subastas perdidas</button>
-              <button className="config-btn">Subastas seguidas</button>
               <button className="config-btn">Historial de pujas</button>
             </section>
 
             {/* SI EL USUARIO TAMBIÉN VENDE */}
             <section className="config-section">
-              <h3>🛒 Como Vendedor</h3>
+              <h3>Subastar...</h3>
 
-              <button className="config-btn">Publicar artículo</button>
+              <button
+                className="config-btn"
+                onClick={() => navigate("/crear-subasta")}
+              >
+                Crear Subasta
+              </button>
               <button className="config-btn">Mis artículos publicados</button>
               <button className="config-btn">Artículos vendidos</button>
-              <button className="config-btn">Estadísticas de ventas</button>
+              {/*subastas que ya finalizaron y que son del current user*/}
             </section>
 
             {/* NAVEGACIÓN */}
@@ -77,8 +83,7 @@ export default function Appbar({ configOpen, setConfigOpen, user }) {
 
             {/* SOPORTE */}
             <section className="config-section">
-              <h3> Ayuda</h3>
-
+              <h3> Ayuda</h3>1
               <button className="config-btn">Centro de ayuda</button>
               <button className="config-btn">Reportar problema</button>
               <button className="config-btn">Términos y condiciones</button>
@@ -91,7 +96,7 @@ export default function Appbar({ configOpen, setConfigOpen, user }) {
               className="logout-btn"
               onClick={() => {
                 localStorage.removeItem("user");
-                navigate("/");
+                navigate("/", { replace: true });
               }}
             >
               ⛔ Cerrar sesión
