@@ -4,6 +4,7 @@ import "./subastaDetails.css";
 export default function SubastaDetails({
   id_subasta,
   descripcion,
+  titulo,
   fecha_ini,
   fecha_fin,
   precio_base,
@@ -44,6 +45,7 @@ export default function SubastaDetails({
 
       if (!response.ok) {
         alert(data.error || "Error al realizar la puja");
+        setMostrarModal(false);
         return;
       }
 
@@ -53,8 +55,6 @@ export default function SubastaDetails({
       alert("Error al pujar");
     }
   };
-  console.log(id_subasta);
-  console.log(user.usuario.id);
 
   return (
     <>
@@ -87,7 +87,7 @@ export default function SubastaDetails({
         </div>
 
         <div className="auction-right">
-          <h2>Subasta #{id_subasta}</h2>
+          <h2>{titulo}</h2>
 
           <p className="current-bid">
             Puja actual: <span>{puja_actual?.monto ?? precio_base}</span>

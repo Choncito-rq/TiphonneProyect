@@ -36,14 +36,9 @@
   padding: 25px;
   overflow-y: auto;
   box-shadow: -4px 0 20px rgba(0,0,0,0.4);
-  animation: slide 0.25s ease-out;
   color: #e4e4e4;
 }
 
-@keyframes slide {
-  from { transform: translateX(80px); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
 
 /* TITULOS */
 .config-panel h2 {
@@ -95,4 +90,48 @@
 .logout-btn:hover {
   background: #992b2b;
   transform: translateY(-2px);
+}
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  font-size: 1.6rem;
+  cursor: pointer;
+  color: #555;
+  transition: color 0.2s ease;
+}
+.config-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.25);
+  backdrop-filter: blur(4px);
+  transition: opacity .25s ease;
+}
+
+.config-overlay.open { opacity: 1; }
+.config-overlay.close { opacity: 0; }
+
+.config-panel {
+  background: #121417;
+  width: 330px;
+  height: 100vh;
+  padding: 25px;
+  overflow-y: auto;
+  box-shadow: -4px 0 20px rgba(0,0,0,0.4);
+  color: #e4e4e4;
+  position: fixed;
+  right: 0;
+  top: 0;
+  transition: transform .25s ease;
+  transform: translateX(100%);
+}
+
+.config-panel.open {
+  transform: translateX(0);
+}
+
+.config-panel.close {
+  transform: translateX(100%);
 }

@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./registro.css";
+import iconoBack from "../assets/back_arrow.svg";
+
 export const nuevoToken = generarToken();
+
 function generarToken(longitud = 8) {
   const caracteres =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-+*_/<>(){}";
@@ -40,11 +43,12 @@ export default function Recover() {
     navigate("/Verify");
   };
 
-
-
   return (
     <div className="recover-container">
       <div className="recover-card">
+        <button className="back-btn" onClick={() => navigate(-1)}>
+          <img src={iconoBack}></img>
+        </button>
         <h2 className="registro-title">Cambio de contraseña</h2>
 
         <form onSubmit={handleSubmit}>
@@ -74,7 +78,6 @@ export default function Recover() {
             Generar Token
           </button>
         </form>
-
       </div>
     </div>
   );

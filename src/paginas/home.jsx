@@ -3,7 +3,7 @@ import "./home.css";
 import Appbar from "../componentes/appbar";
 import Modal from "../componentes/model";
 import SubastaDetails from "../componentes/subastaDetails";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 
@@ -15,14 +15,12 @@ export default function Home() {
   const [vista, setVista] = useState("subastas");
   const [busqueda, setBusqueda] = useState("");
   const [categoria, setCategoria] = useState("");
-
   const [userid, setUserId] = useState(null);
-
   const [subastas, setSubastas] = useState([]); // datos filtrados
   const [subastasOriginal, setSubastasOriginal] = useState([]); // datos reales sin tocar
-
   const navigate = useNavigate();
-
+  const nodeRef = useRef(null);
+  const [loading, setLoading] = useState(true);
   /* 🔹 Cargar usuario */
   useEffect(() => {
     const stored = localStorage.getItem("user");
@@ -38,6 +36,7 @@ export default function Home() {
   }, []);
 
   async function cargarSubastas() {
+    setLoading(true);
     const response = await fetch(
       "https://tiphonne-api-render.onrender.com/subastas"
     );
@@ -74,6 +73,7 @@ export default function Home() {
 
     setSubastas(formato);
     setSubastasOriginal(formato);
+    setLoading(false);
   }
 
   const realizarBusqueda = () => {
@@ -139,7 +139,9 @@ export default function Home() {
 
     // vistas de mi subastas
     if (vista === "mis-subastas") {
-      const mias = subastasOriginal.filter((s) => s.creador === usuario?.id);
+      const mias = subastasOriginal.filter(
+        (s) => s.creador === usuario?.usuario?.id
+      );
 
       return (
         <>
@@ -256,16 +258,25 @@ export default function Home() {
       </nav>
 
       <div className="home-content">
-        <SwitchTransition>
-          <CSSTransition
-            key={vista}
-            timeout={300}
-            classNames="fade"
-            unmountOnExit
-          >
-            <div className="vista fade-content">{renderVista()}</div>
-          </CSSTransition>
-        </SwitchTransition>
+        {loading ? (
+          <div style={{ textAlign: "center", padding: "40px" }}>
+            <p>Cargando subastas...</p>
+          </div>
+        ) : (
+          <SwitchTransition>
+            <CSSTransition
+              key={vista}
+              timeout={300}
+              classNames="fade"
+              nodeRef={nodeRef}
+              unmountOnExit
+            >
+              <div ref={nodeRef} className="vista fade-content">
+                {renderVista()}
+              </div>
+            </CSSTransition>
+          </SwitchTransition>
+        )}
       </div>
 
       {/* MODAL */}
@@ -273,6 +284,7 @@ export default function Home() {
         {selectedSubasta && (
           <SubastaDetails
             id_subasta={selectedSubasta.id}
+            titulo={selectedSubasta.titulo}
             descripcion={selectedSubasta.descripcion}
             fecha_ini={selectedSubasta.fecha_inicio}
             fecha_fin={selectedSubasta.fecha_fin}
