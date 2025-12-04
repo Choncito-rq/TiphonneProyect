@@ -15,20 +15,15 @@ export default function Home() {
   const [vista, setVista] = useState("subastas");
   const [busqueda, setBusqueda] = useState("");
   const [categoria, setCategoria] = useState("");
-  const [userid, setUserId] = useState(null);
   const [subastas, setSubastas] = useState([]);
 
   const navigate = useNavigate();
 
-
   useEffect(() => {
     const stored = localStorage.getItem("user");
     const userParsed = stored ? JSON.parse(stored) : null;
-    const idStored = localStorage.getItem("iduser");
     setUsuario(userParsed);
-    setUserId(idStored);
   }, []);
-
 
   useEffect(() => {
     cargarSubastas();
@@ -57,22 +52,20 @@ export default function Home() {
     setSubastas(formato);
   }
 
-
-  const realizarBusqueda = () => { //ESTO AUN ESTA EN ETAPAS DE DESARROLLO
+  const realizarBusqueda = () => {
+    //ESTO AUN ESTA EN ETAPAS DE DESARROLLO
     const filtradas = subastas.filter((s) => {
       const coincideBusqueda = s.titulo
         .toLowerCase()
         .includes(busqueda.toLowerCase());
 
-      const coincideCategoria =
-        categoria === "" || s.categoria === categoria; //INEXISTENTE
+      const coincideCategoria = categoria === "" || s.categoria === categoria; //INEXISTENTE
 
       return coincideBusqueda && coincideCategoria;
     });
 
     setSubastas(filtradas);
   };
-
 
   const handleOpen = (subasta) => {
     setSelectedSubasta(subasta);
@@ -84,12 +77,11 @@ export default function Home() {
     setIsOpen(false);
   };
 
-
   const logout = () => {
     localStorage.removeItem("user");
     navigate("/", { replace: true });
   };
-
+  console.log(usuario?.usuario?.id);
   const renderVista = () => {
     if (vista === "subastas") {
       return (
@@ -97,7 +89,9 @@ export default function Home() {
           <section className="home-header">
             <div>
               <h1>Subastas Disponibles</h1>
-              <p>Explora artículos interesantes y participa en pujas activas.</p>
+              <p>
+                Explora artículos interesantes y participa en pujas activas.
+              </p>
             </div>
           </section>
 
@@ -110,7 +104,6 @@ export default function Home() {
                   imagen={subasta.imagen}
                   precio={subasta.precio_inicial}
                   fechafin={subasta.fecha_fin}
-                  iduser={userid}
                 />
               </div>
             ))}
@@ -120,8 +113,6 @@ export default function Home() {
     }
 
     if (vista === "mis-subastas") {
-      const mias = subastas.filter((s) => s.creador === usuario?.id);
-
       return (
         <>
           <section className="home-header">
@@ -132,23 +123,17 @@ export default function Home() {
           </section>
 
           <div className="card-container">
-            {mias.length === 0 ? (
-              <p style={{ textAlign: "center", width: "100%" }}>
-                No tienes subastas creadas.
-              </p>
-            ) : (
-              mias.map((subasta) => (
-                <div key={subasta.id} onClick={() => handleOpen(subasta)}>
-                  <CardSubasta
-                    id={subasta.id}
-                    titulo={subasta.titulo}
-                    imagen={subasta.imagen}
-                    precio={subasta.precio_inicial}
-                    fechafin={subasta.fecha_fin}
-                  />
-                </div>
-              ))
-            )}
+            {subastas.map((subasta) => (
+              <div key={subasta.id} onClick={() => handleOpen(subasta)}>
+                <CardSubasta
+                  id={subasta.id}
+                  titulo={subasta.titulo}
+                  imagen={subasta.imagen}
+                  precio={subasta.precio_inicial}
+                  fechafin={subasta.fecha_fin}
+                />
+              </div>
+            ))}
           </div>
         </>
       );
@@ -164,7 +149,6 @@ export default function Home() {
     }
   };
 
-
   return (
     <>
       <Appbar
@@ -172,7 +156,6 @@ export default function Home() {
         setConfigOpen={setConfigOpen}
         logout={logout}
         user={usuario}
-        userid={userid}
       />
 
       {/* 🔍 BARRA DE BÚSQUEDA */}

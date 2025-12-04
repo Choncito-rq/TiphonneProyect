@@ -27,7 +27,6 @@ export default function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        console.log("okey");
         localStorage.setItem(
           "user",
           JSON.stringify({

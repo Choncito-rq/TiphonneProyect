@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./crearSubasta.css";
 
 export default function CrearSubasta() {
@@ -11,15 +11,18 @@ export default function CrearSubasta() {
   const [imagenesFiles, setImagenesFiles] = useState([]);
   const [subiendo, setSubiendo] = useState(false);
   const [titulo, setTitulo] = useState("");
+  const [usuario, setUsuario] = useState(null);
 
-  // ============================================================
-  //               FUNCIÓN DE SUBIDA A CLOUDINARY
-  // ============================================================
+  //subida a cloudinary
+  useEffect(() => {
+    const stored = localStorage.getItem("user");
+    const parsed = stored ? JSON.parse(stored) : null;
+    setUsuario(parsed);
+  }, []);
   const uploadImage = async (file) => {
     const data = new FormData();
     data.append("file", file);
 
-    // 🔥 CREDENCIALES 🔥
     data.append("upload_preset", "preset_publico");
     data.append("folder", "subastas");
 
@@ -40,9 +43,8 @@ export default function CrearSubasta() {
     return json.secure_url;
   };
 
-  // ============================================================
-  //               MANEJO DE IMÁGENES LOCAL
-  // ============================================================
+  // MANEJO DE IMÁGENES LOCAL
+
   const manejarImagenes = (e) => {
     const files = Array.from(e.target.files);
 
@@ -83,12 +85,12 @@ export default function CrearSubasta() {
     setSubiendo(false);
 
     const data = {
-      descripcion,
+      id_usuario: usuario.usuario.id,
+      descripcion: descripcion,
       precio_base: precioBase,
-      fecha_ini: fechaIni,
+
       fecha_fin: fechaFin,
-      imagenes: urls,
-      id_usuario_creador: 1,
+      urls_imagenes: urls,
     };
 
     try {
@@ -112,7 +114,7 @@ export default function CrearSubasta() {
       alert("Error al crear la subasta");
     }
   };
-
+  //console.log("hey: " + usuario.usuario.id);
   return (
     <section className="perfil-container">
       <div className="perfil-card">
