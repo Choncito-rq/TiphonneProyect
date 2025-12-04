@@ -272,8 +272,13 @@ export default function Home() {
       <Modal isOpen={isOpen} onClose={handleClose}>
         {selectedSubasta && (
           <SubastaDetails
-            {...selectedSubasta}
-            imagenes={selectedSubasta?.imagenes ?? []}
+            id_subasta={selectedSubasta.id}
+            descripcion={selectedSubasta.descripcion}
+            fecha_ini={selectedSubasta.fecha_inicio}
+            fecha_fin={selectedSubasta.fecha_fin}
+            precio_base={selectedSubasta.precio_base}
+            puja_actual={selectedSubasta.puja_actual}
+            imagenes={selectedSubasta.imagenes}
           />
         )}
       </Modal>

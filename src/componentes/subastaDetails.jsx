@@ -1,6 +1,5 @@
 import { useState } from "react";
 import "./subastaDetails.css";
-import { useEffect } from "react";
 
 export default function SubastaDetails({
   id_subasta,
@@ -9,88 +8,81 @@ export default function SubastaDetails({
   fecha_fin,
   precio_base,
   puja_actual,
-  imagenes,
+  imagenes = [],
 }) {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [monto, setMonto] = useState("");
-  const [user, setUser] = useState(null);
   const [imagenActual, setImagenActual] = useState(
     imagenes[0] || "https://picsum.photos/400/300"
   );
 
-  useEffect(() => {
-    const stored = localStorage.getItem("user");
-    const userParsed = stored ? JSON.parse(stored) : null;
-    setUser(userParsed);
-  }, []);
-
+  const user = JSON.parse(localStorage.getItem("user"));
+  console.log(user?.usuario?.id);
   const handlePujar = async () => {
-      //EL ERROR AQUI ES QUE id_subasta ES INDEFINIDO
-  try {
-    const response = await fetch(
-      `https://tiphonne-api-render.onrender.com/subastas/${id_subasta}/pujas`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id_usuario: user?.usuario?.id, 
-          puja: monto 
-        }),
-      }
-    );
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      console.error("Error del backend:", data);
-      alert(data.error || "Error al realizar la puja");
+    if (!monto || Number(monto) <= (puja_actual?.monto ?? precio_base)) {
+      alert("La puja debe ser mayor a la actual.");
       return;
     }
 
-    console.log("Puja enviada:", data);
-    alert("Puja realizada correctamente");
-    setMostrarModal(false);
-  } catch (error) {
-    console.error(error);
-    alert("Error al pujar");
-  }
-};
+    try {
+      const response = await fetch(
+        `https://tiphonne-api-render.onrender.com/subastas/${id_subasta}/pujas`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id_usuario: user?.usuario?.id,
 
+            puja: monto,
+          }),
+        }
+      );
+      /*   id_usuario=data['id_usuario'],
+                id_subasta=id_subasta,
+                puja=data['puja']*/
+      const data = await response.json();
 
-  const cambiarImagen = (src) => {
-    setImagenActual(src);
+      if (!response.ok) {
+        alert(data.error || "Error al realizar la puja");
+        return;
+      }
+
+      alert("Puja realizada correctamente");
+      setMostrarModal(false);
+    } catch (error) {
+      alert("Error al pujar");
+    }
   };
+  console.log(id_subasta);
+  console.log(user.usuario.id);
 
   return (
     <>
       <article className="auction-details">
         <div className="auction-left">
-          <div className="main-image">
-            <img src={imagenActual} alt="Imagen principal" />
-          </div>
+          <img
+            className="main-image"
+            src={imagenActual}
+            alt="Imagen principal"
+          />
 
           <div className="image-thumbs">
-            {imagenes.length > 0
-              ? imagenes.map((img, i) => (
-                  <img
-                    key={i}
-                    src={img}
-                    alt="mini"
-                    onClick={() => cambiarImagen(img)}
-                    className="thumb-img"
-                  />
-                ))
-              : [1, 2, 3].map((i) => (
-                  <img
-                    key={i}
-                    src={`https://picsum.photos/100/10${i}`}
-                    alt="mini"
-                    onClick={() =>
-                      cambiarImagen(`https://picsum.photos/400/30${i}`)
-                    }
-                    className="thumb-img"
-                  />
-                ))}
+            {(imagenes.length > 0
+              ? imagenes
+              : [
+                  "https://picsum.photos/400/301",
+                  "https://picsum.photos/400/302",
+                  "https://picsum.photos/400/303",
+                ]
+            ).map((img, i) => (
+              <img
+                key={i}
+                src={img}
+                alt="mini"
+                onClick={() => setImagenActual(img)}
+                className="thumb-img"
+              />
+            ))}
           </div>
         </div>
 
@@ -98,10 +90,8 @@ export default function SubastaDetails({
           <h2>Subasta #{id_subasta}</h2>
 
           <p className="current-bid">
-            Puja actual: <span>{puja_actual?.monto || precio_base}</span>
+            Puja actual: <span>{puja_actual?.monto ?? precio_base}</span>
           </p>
-
-          <p>Precio base: {precio_base}</p>
 
           <div className="bid-actions">
             <button
@@ -127,6 +117,7 @@ export default function SubastaDetails({
             <h3>Realizar puja</h3>
             <input
               type="number"
+              min="1"
               value={monto}
               onChange={(e) => setMonto(e.target.value)}
               placeholder="Ingresa tu oferta"
