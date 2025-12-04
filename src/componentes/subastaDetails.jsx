@@ -25,6 +25,7 @@ export default function SubastaDetails({
   }, []);
 
   const handlePujar = async () => {
+      //EL ERROR AQUI ES QUE id_subasta ES INDEFINIDO
   try {
     const response = await fetch(
       `https://tiphonne-api-render.onrender.com/subastas/${id_subasta}/pujas`,
@@ -32,20 +33,21 @@ export default function SubastaDetails({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          id_usuario: user?.usuario?.id,
-          puja: monto,
+          id_usuario: user?.usuario?.id, 
+          puja: monto 
         }),
       }
     );
 
     const data = await response.json();
-    console.log("Puja enviada:", data);
 
     if (!response.ok) {
-      alert(data.error || "Error al pujar");
+      console.error("Error del backend:", data);
+      alert(data.error || "Error al realizar la puja");
       return;
     }
 
+    console.log("Puja enviada:", data);
     alert("Puja realizada correctamente");
     setMostrarModal(false);
   } catch (error) {
