@@ -3,7 +3,7 @@ import "./home.css";
 import Appbar from "../componentes/appbar";
 import Modal from "../componentes/model";
 import SubastaDetails from "../componentes/subastaDetails";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react"; // ← FALTABA useRef
 import { useNavigate } from "react-router-dom";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 
@@ -15,16 +15,21 @@ export default function Home() {
   const [vista, setVista] = useState("subastas");
   const [busqueda, setBusqueda] = useState("");
   const [categoria, setCategoria] = useState("");
-  const [subastas, setSubastas] = useState([]);
 
+  const [subastas, setSubastas] = useState([]);
+  const [subastasOriginal, setSubastasOriginal] = useState([]); // ← Para no perder las originales
+
+  const nodeRef = useRef(null);
   const navigate = useNavigate();
 
+  // Cargar usuario
   useEffect(() => {
     const stored = localStorage.getItem("user");
     const userParsed = stored ? JSON.parse(stored) : null;
     setUsuario(userParsed);
   }, []);
 
+  // Cargar subastas
   useEffect(() => {
     cargarSubastas();
   }, []);
@@ -50,16 +55,18 @@ export default function Home() {
     }));
 
     setSubastas(formato);
+    setSubastasOriginal(formato); // ← Guardar copia original
   }
 
+  // BUSCADOR
   const realizarBusqueda = () => {
-    //ESTO AUN ESTA EN ETAPAS DE DESARROLLO
-    const filtradas = subastas.filter((s) => {
+    const filtradas = subastasOriginal.filter((s) => {
       const coincideBusqueda = s.titulo
         .toLowerCase()
         .includes(busqueda.toLowerCase());
 
-      const coincideCategoria = categoria === "" || s.categoria === categoria; //INEXISTENTE
+      // no existe "categoria" en API
+      const coincideCategoria = categoria === "";
 
       return coincideBusqueda && coincideCategoria;
     });
@@ -67,32 +74,33 @@ export default function Home() {
     setSubastas(filtradas);
   };
 
+  // ABRIR MODAL
   const handleOpen = (subasta) => {
     setSelectedSubasta(subasta);
     setIsOpen(true);
   };
 
+  // CERRAR MODAL
   const handleClose = () => {
     setSelectedSubasta(null);
     setIsOpen(false);
   };
 
+  // LOGOUT
   const logout = () => {
     localStorage.removeItem("user");
     navigate("/", { replace: true });
   };
-  console.log(usuario?.usuario?.id);
+
+  // VISTAS
   const renderVista = () => {
+    // Vista SUBASTAS
     if (vista === "subastas") {
       return (
         <>
           <section className="home-header">
-            <div>
-              <h1>Subastas Disponibles</h1>
-              <p>
-                Explora artículos interesantes y participa en pujas activas.
-              </p>
-            </div>
+            <h1>Subastas Disponibles</h1>
+            <p>Explora artículos interesantes y participa en pujas activas.</p>
           </section>
 
           <div className="card-container">
@@ -112,18 +120,23 @@ export default function Home() {
       );
     }
 
+    // Vista MIS SUBASTAS
     if (vista === "mis-subastas") {
+      const creadorId = usuario?.usuario?.id;
+
+      const mias = subastasOriginal.filter((s) => s.creador == creadorId);
+
       return (
         <>
           <section className="home-header">
-            <div>
-              <h1>Tus Subastas</h1>
-              <p>Subastas creadas por ti.</p>
-            </div>
+            <h1>Tus Subastas</h1>
+            <p>Subastas creadas por ti.</p>
           </section>
 
           <div className="card-container">
-            {subastas.map((subasta) => (
+            {mias.length === 0 && <p>No tienes subastas creadas.</p>}
+
+            {mias.map((subasta) => (
               <div key={subasta.id} onClick={() => handleOpen(subasta)}>
                 <CardSubasta
                   id={subasta.id}
@@ -139,6 +152,7 @@ export default function Home() {
       );
     }
 
+    // Vista MIS PUJAS (futuro)
     if (vista === "mis-pujas") {
       return (
         <section className="home-header">
@@ -158,13 +172,9 @@ export default function Home() {
         user={usuario}
       />
 
-      {/* 🔍 BARRA DE BÚSQUEDA */}
+      {/* BARRA DE BUSQUEDA */}
       <section className="search-bar">
-        <span
-          className="search-icon"
-          onClick={realizarBusqueda}
-          style={{ cursor: "pointer" }}
-        >
+        <span className="search-icon" onClick={realizarBusqueda}>
           🔍
         </span>
 
@@ -191,7 +201,7 @@ export default function Home() {
         </select>
       </section>
 
-      {/* NAVEGACIÓN */}
+      {/* NAV */}
       <nav className="home-nav">
         <div className="nav-box">
           <button
@@ -217,15 +227,19 @@ export default function Home() {
         </div>
       </nav>
 
+      {/* ANIMACIÓN */}
       <div className="home-content">
         <SwitchTransition>
           <CSSTransition
             key={vista}
             timeout={300}
             classNames="fade"
+            nodeRef={nodeRef}
             unmountOnExit
           >
-            <div className="vista fade-content">{renderVista()}</div>
+            <div ref={nodeRef} className="vista fade-content">
+              {renderVista()}
+            </div>
           </CSSTransition>
         </SwitchTransition>
       </div>
@@ -235,7 +249,7 @@ export default function Home() {
         {selectedSubasta && (
           <SubastaDetails
             {...selectedSubasta}
-            imagenes={selectedSubasta?.imagenes ?? []}
+            imagenes={selectedSubasta.imagenes ?? []}
           />
         )}
       </Modal>
