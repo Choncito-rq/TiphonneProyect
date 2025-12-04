@@ -3,6 +3,7 @@ import "./home.css";
 import Appbar from "../componentes/appbar";
 import Modal from "../componentes/model";
 import SubastaDetails from "../componentes/subastaDetails";
+import searchIcon from "../Assets/tosearch.svg";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
@@ -16,44 +17,34 @@ export default function Home() {
   const [busqueda, setBusqueda] = useState("");
   const [categoria, setCategoria] = useState("");
   const [userid, setUserId] = useState(null);
-  const [subastas, setSubastas] = useState([]); // datos filtrados
-  const [subastasOriginal, setSubastasOriginal] = useState([]); // datos reales sin tocar
+  const [subastas, setSubastas] = useState([]);
+  const [subastasOriginal, setSubastasOriginal] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const nodeRef = useRef(null);
-  const [loading, setLoading] = useState(true);
-  /* 🔹 Cargar usuario */
+
   useEffect(() => {
     const stored = localStorage.getItem("user");
     const idStored = localStorage.getItem("iduser");
-
     setUsuario(stored ? JSON.parse(stored) : null);
     setUserId(idStored);
   }, []);
 
-  /* 🔹 Cargar subastas */
   useEffect(() => {
     cargarSubastas();
   }, []);
 
   async function cargarSubastas() {
     setLoading(true);
-    const response = await fetch(
-      "https://tiphonne-api-render.onrender.com/subastas"
-    );
+    const response = await fetch("https://tiphonne-api-render.onrender.com/subastas");
     const data = await response.json();
 
     const formato = data.map((s) => {
-      // Asegurar que urls_imagenes sea array
       let imagenes = [];
 
-      if (Array.isArray(s.urls_imagenes)) {
-        imagenes = s.urls_imagenes;
-      } else if (typeof s.urls_imagenes === "string") {
-        try {
-          imagenes = JSON.parse(s.urls_imagenes);
-        } catch {
-          imagenes = [];
-        }
+      if (Array.isArray(s.urls_imagenes)) imagenes = s.urls_imagenes;
+      else if (typeof s.urls_imagenes === "string") {
+        try { imagenes = JSON.parse(s.urls_imagenes); } catch { imagenes = []; }
       }
 
       return {
@@ -61,13 +52,14 @@ export default function Home() {
         titulo: s.titulo,
         descripcion: s.descripcion,
         imagenes: imagenes,
-        imagen: imagenes[0] ?? null, // primera imagen
+        imagen: imagenes[0] ?? null,
         precio_inicial: s.puja_actual?.monto ?? s.precio_base,
         precio_base: s.precio_base,
         puja_actual: s.puja_actual,
         fecha_inicio: s.fecha_ini,
         fecha_fin: s.fecha_fin,
         creador: s.id_usuario_creador,
+        categorias: s.categoria
       };
     });
 
@@ -77,20 +69,21 @@ export default function Home() {
   }
 
   const realizarBusqueda = () => {
-    const texto = busqueda.toLowerCase();
-    const cat = categoria === "" || categoria === "General" ? null : categoria;
+  const texto = (busqueda || "").toLowerCase();
+  const cat = categoria === "" || categoria === "General" ? null : categoria;
 
-    const filtradas = subastasOriginal.filter((s) => {
-      const coincideBusqueda = s.titulo.toLowerCase().includes(texto);
-      const coincideCategoria = !cat || s.categoria === cat;
+  const filtradas = subastasOriginal.filter((s) => {
+    const titulo = s.titulo ? s.titulo.toLowerCase() : "";
+    const coincideBusqueda = titulo.includes(texto);
+    const coincideCategoria = !cat || s.categoria === cat;
 
-      return coincideBusqueda && coincideCategoria;
-    });
+    return coincideBusqueda && coincideCategoria;
+  });
 
-    setSubastas(filtradas);
-  };
+  setSubastas(filtradas);
+};
 
-  /* 🔹 Abrir modal */
+
   const handleOpen = (subasta) => {
     setSelectedSubasta(subasta);
     setIsOpen(true);
@@ -113,9 +106,7 @@ export default function Home() {
           <section className="home-header">
             <div>
               <h1>Subastas Disponibles</h1>
-              <p>
-                Explora artículos interesantes y participa en pujas activas.
-              </p>
+              <p>Explora artículos interesantes y participa en pujas activas.</p>
             </div>
           </section>
 
@@ -137,7 +128,6 @@ export default function Home() {
       );
     }
 
-    // vistas de mi subastas
     if (vista === "mis-subastas") {
       const mias = subastasOriginal.filter(
         (s) => s.creador === usuario?.usuario?.id
@@ -154,9 +144,7 @@ export default function Home() {
 
           <div className="card-container">
             {mias.length === 0 ? (
-              <p style={{ textAlign: "center", width: "100%" }}>
-                No tienes subastas creadas.
-              </p>
+              <p style={{ textAlign: "center", width: "100%" }}>No tienes subastas creadas.</p>
             ) : (
               mias.map((subasta) => (
                 <div key={subasta.id} onClick={() => handleOpen(subasta)}>
@@ -201,7 +189,7 @@ export default function Home() {
           onClick={realizarBusqueda}
           style={{ cursor: "pointer" }}
         >
-          🔍
+          <img src={searchIcon} alt="Buscar" />
         </span>
 
         <input
@@ -228,7 +216,6 @@ export default function Home() {
         </select>
       </section>
 
-      {/* NAV */}
       <nav className="home-nav">
         <div className="nav-box">
           <button
@@ -279,7 +266,6 @@ export default function Home() {
         )}
       </div>
 
-      {/* MODAL */}
       <Modal isOpen={isOpen} onClose={handleClose}>
         {selectedSubasta && (
           <SubastaDetails
