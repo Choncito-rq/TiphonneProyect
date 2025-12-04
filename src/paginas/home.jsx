@@ -40,22 +40,37 @@ export default function Home() {
     );
     const data = await response.json();
 
-    const formato = data.map((s) => ({
-      id: s.id_subasta,
-      titulo: s.descripcion,
-      descripcion: s.descripcion,
-      imagenes: s.imagenes ?? [],
-      imagen: s.imagenes?.[0] ?? null,
-      precio_inicial: s.puja_actual?.monto ?? s.precio_base,
-      precio_base: s.precio_base,
-      puja_actual: s.puja_actual,
-      fecha_inicio: s.fecha_ini,
-      fecha_fin: s.fecha_fin,
-      creador: s.id_usuario_creador,
-    }));
+    const formato = data.map((s) => {
+      // Asegurar que urls_imagenes sea array
+      let imagenes = [];
+
+      if (Array.isArray(s.urls_imagenes)) {
+        imagenes = s.urls_imagenes;
+      } else if (typeof s.urls_imagenes === "string") {
+        try {
+          imagenes = JSON.parse(s.urls_imagenes);
+        } catch {
+          imagenes = [];
+        }
+      }
+
+      return {
+        id: s.id_subasta,
+        titulo: s.titulo,
+        descripcion: s.descripcion,
+        imagenes: imagenes,
+        imagen: imagenes[0] ?? null, // primera imagen
+        precio_inicial: s.puja_actual?.monto ?? s.precio_base,
+        precio_base: s.precio_base,
+        puja_actual: s.puja_actual,
+        fecha_inicio: s.fecha_ini,
+        fecha_fin: s.fecha_fin,
+        creador: s.id_usuario_creador,
+      };
+    });
 
     setSubastas(formato);
-    setSubastasOriginal(formato); // ← Guardar copia original
+    setSubastasOriginal(formato);
   }
 
   // BUSCADOR
@@ -94,7 +109,7 @@ export default function Home() {
 
   // VISTAS
   const renderVista = () => {
-    // Vista SUBASTAS
+    // ver
     if (vista === "subastas") {
       return (
         <>
@@ -120,7 +135,7 @@ export default function Home() {
       );
     }
 
-    // Vista MIS SUBASTAS
+    // vistas de mi subastas
     if (vista === "mis-subastas") {
       const creadorId = usuario?.usuario?.id;
 

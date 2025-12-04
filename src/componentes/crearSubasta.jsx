@@ -86,11 +86,11 @@ export default function CrearSubasta() {
 
     const data = {
       id_usuario: usuario.usuario.id,
+      fecha_fin: fechaFin,
       descripcion: descripcion,
       precio_base: precioBase,
-
-      fecha_fin: fechaFin,
-      urls_imagenes: urls,
+      urls_imgs: urls,
+      titulo: titulo,
     };
 
     try {
