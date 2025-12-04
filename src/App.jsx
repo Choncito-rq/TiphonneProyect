@@ -7,6 +7,7 @@ import Home from "./paginas/home.jsx";
 import New from "./paginas/New_Password.jsx";
 import EditarPerfil from "./componentes/editarperfil.jsx";
 import CrearSubasta from "./componentes/crearSubasta.jsx";
+import MisPujas from "./componentes/historialDePujas.jsx";
 
 import "./App.css";
 
@@ -22,6 +23,7 @@ export default function App() {
         <Route path="/home" element={<Home />}></Route>
         <Route path="/editar-perfil" element={<EditarPerfil />}></Route>
         <Route path="/crear-subasta" element={<CrearSubasta />}></Route>
+        <Route path="/mis-pujas" element={<MisPujas />} />
       </Routes>
     </BrowserRouter>
   );

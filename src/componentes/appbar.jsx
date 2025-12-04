@@ -75,7 +75,12 @@ export default function Appbar({ configOpen, setConfigOpen, user, userid }) {
             {/* SUBASTAS */}
             <section className="config-section">
               <h3>Mis Subastas</h3>
-              <button className="config-btn">Historial de pujas</button>
+              <button
+                className="config-btn"
+                onClick={() => navigate("/mis-pujas")}
+              >
+                Historial de pujas
+              </button>
             </section>
 
             {/* PARA VENDEDORES */}
@@ -92,23 +97,10 @@ export default function Appbar({ configOpen, setConfigOpen, user, userid }) {
               <button className="config-btn">Artículos vendidos</button>
             </section>
 
-            {/* NAVEGACIÓN */}
-            <section className="config-section">
-              <h3>Navegación</h3>
-
-              <button className="config-btn">Categorías</button>
-              <button className="config-btn">Subastas nuevas</button>
-              <button className="config-btn">
-                Subastas que terminan pronto
-              </button>
-              <button className="config-btn">Recomendaciones</button>
-            </section>
-
             {/* SOPORTE */}
             <section className="config-section">
               <h3>Ayuda</h3>
 
-              <button className="config-btn">Centro de ayuda</button>
               <button className="config-btn">Reportar problema</button>
               <button className="config-btn">Términos y condiciones</button>
               <button className="config-btn">Privacidad</button>
