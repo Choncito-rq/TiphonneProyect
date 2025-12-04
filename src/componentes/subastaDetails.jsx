@@ -25,28 +25,35 @@ export default function SubastaDetails({
   }, []);
 
   const handlePujar = async () => {
-
-    try {
-      const response = await fetch("https://tiphonne-api-render.onrender.com/subastas/pu", {
+  try {
+    const response = await fetch(
+      `https://tiphonne-api-render.onrender.com/subastas/${id_subasta}/pujas`,
+      {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          id_usuario_pujador: user?.usuario?.id,
-          id_subasta: id_subasta,
-          monto: monto,
+          id_usuario: user?.usuario?.id,
+          puja: monto,
         }),
+      }
+    );
 
-      });
-      const data = await response.json();
-      console.log("Puja enviada:", data);
+    const data = await response.json();
+    console.log("Puja enviada:", data);
 
-      alert("Puja realizada correctamente");
-      setMostrarModal(false);
-    } catch (error) {
-      console.error(error);
-      alert("Error al pujar");
+    if (!response.ok) {
+      alert(data.error || "Error al pujar");
+      return;
     }
-  };
+
+    alert("Puja realizada correctamente");
+    setMostrarModal(false);
+  } catch (error) {
+    console.error(error);
+    alert("Error al pujar");
+  }
+};
+
 
   const cambiarImagen = (src) => {
     setImagenActual(src);

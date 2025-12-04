@@ -45,7 +45,7 @@ export default function Recover() {
   return (
     <div className="recover-container">
       <div className="recover-card">
-        <h2 className="registro-title">Recuperar Cuenta</h2>
+        <h2 className="registro-title">Cambio de contraseña</h2>
 
         <form onSubmit={handleSubmit}>
           <div className="input-group">

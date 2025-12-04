@@ -3,7 +3,7 @@ import "./home.css";
 import Appbar from "../componentes/appbar";
 import Modal from "../componentes/model";
 import SubastaDetails from "../componentes/subastaDetails";
-import { useState, useEffect, useRef } from "react"; // ← FALTABA useRef
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 
@@ -16,20 +16,23 @@ export default function Home() {
   const [busqueda, setBusqueda] = useState("");
   const [categoria, setCategoria] = useState("");
 
-  const [subastas, setSubastas] = useState([]);
-  const [subastasOriginal, setSubastasOriginal] = useState([]); // ← Para no perder las originales
+  const [userid, setUserId] = useState(null);
 
-  const nodeRef = useRef(null);
+  const [subastas, setSubastas] = useState([]); // datos filtrados
+  const [subastasOriginal, setSubastasOriginal] = useState([]); // datos reales sin tocar
+
   const navigate = useNavigate();
 
-  // Cargar usuario
+  /* 🔹 Cargar usuario */
   useEffect(() => {
     const stored = localStorage.getItem("user");
-    const userParsed = stored ? JSON.parse(stored) : null;
-    setUsuario(userParsed);
+    const idStored = localStorage.getItem("iduser");
+
+    setUsuario(stored ? JSON.parse(stored) : null);
+    setUserId(idStored);
   }, []);
 
-  // Cargar subastas
+  /* 🔹 Cargar subastas */
   useEffect(() => {
     cargarSubastas();
   }, []);
@@ -73,15 +76,13 @@ export default function Home() {
     setSubastasOriginal(formato);
   }
 
-  // BUSCADOR
   const realizarBusqueda = () => {
-    const filtradas = subastasOriginal.filter((s) => {
-      const coincideBusqueda = s.titulo
-        .toLowerCase()
-        .includes(busqueda.toLowerCase());
+    const texto = busqueda.toLowerCase();
+    const cat = categoria === "" || categoria === "General" ? null : categoria;
 
-      // no existe "categoria" en API
-      const coincideCategoria = categoria === "";
+    const filtradas = subastasOriginal.filter((s) => {
+      const coincideBusqueda = s.titulo.toLowerCase().includes(texto);
+      const coincideCategoria = !cat || s.categoria === cat;
 
       return coincideBusqueda && coincideCategoria;
     });
@@ -89,33 +90,33 @@ export default function Home() {
     setSubastas(filtradas);
   };
 
-  // ABRIR MODAL
+  /* 🔹 Abrir modal */
   const handleOpen = (subasta) => {
     setSelectedSubasta(subasta);
     setIsOpen(true);
   };
 
-  // CERRAR MODAL
   const handleClose = () => {
     setSelectedSubasta(null);
     setIsOpen(false);
   };
 
-  // LOGOUT
   const logout = () => {
     localStorage.removeItem("user");
     navigate("/", { replace: true });
   };
 
-  // VISTAS
   const renderVista = () => {
-    // ver
     if (vista === "subastas") {
       return (
         <>
           <section className="home-header">
-            <h1>Subastas Disponibles</h1>
-            <p>Explora artículos interesantes y participa en pujas activas.</p>
+            <div>
+              <h1>Subastas Disponibles</h1>
+              <p>
+                Explora artículos interesantes y participa en pujas activas.
+              </p>
+            </div>
           </section>
 
           <div className="card-container">
@@ -127,6 +128,7 @@ export default function Home() {
                   imagen={subasta.imagen}
                   precio={subasta.precio_inicial}
                   fechafin={subasta.fecha_fin}
+                  iduser={userid}
                 />
               </div>
             ))}
@@ -137,37 +139,40 @@ export default function Home() {
 
     // vistas de mi subastas
     if (vista === "mis-subastas") {
-      const creadorId = usuario?.usuario?.id;
-
-      const mias = subastasOriginal.filter((s) => s.creador == creadorId);
+      const mias = subastasOriginal.filter((s) => s.creador === usuario?.id);
 
       return (
         <>
           <section className="home-header">
-            <h1>Tus Subastas</h1>
-            <p>Subastas creadas por ti.</p>
+            <div>
+              <h1>Tus Subastas</h1>
+              <p>Subastas creadas por ti.</p>
+            </div>
           </section>
 
           <div className="card-container">
-            {mias.length === 0 && <p>No tienes subastas creadas.</p>}
-
-            {mias.map((subasta) => (
-              <div key={subasta.id} onClick={() => handleOpen(subasta)}>
-                <CardSubasta
-                  id={subasta.id}
-                  titulo={subasta.titulo}
-                  imagen={subasta.imagen}
-                  precio={subasta.precio_inicial}
-                  fechafin={subasta.fecha_fin}
-                />
-              </div>
-            ))}
+            {mias.length === 0 ? (
+              <p style={{ textAlign: "center", width: "100%" }}>
+                No tienes subastas creadas.
+              </p>
+            ) : (
+              mias.map((subasta) => (
+                <div key={subasta.id} onClick={() => handleOpen(subasta)}>
+                  <CardSubasta
+                    id={subasta.id}
+                    titulo={subasta.titulo}
+                    imagen={subasta.imagen}
+                    precio={subasta.precio_inicial}
+                    fechafin={subasta.fecha_fin}
+                  />
+                </div>
+              ))
+            )}
           </div>
         </>
       );
     }
 
-    // Vista MIS PUJAS (futuro)
     if (vista === "mis-pujas") {
       return (
         <section className="home-header">
@@ -185,11 +190,15 @@ export default function Home() {
         setConfigOpen={setConfigOpen}
         logout={logout}
         user={usuario}
+        userid={userid}
       />
 
-      {/* BARRA DE BUSQUEDA */}
       <section className="search-bar">
-        <span className="search-icon" onClick={realizarBusqueda}>
+        <span
+          className="search-icon"
+          onClick={realizarBusqueda}
+          style={{ cursor: "pointer" }}
+        >
           🔍
         </span>
 
@@ -207,12 +216,13 @@ export default function Home() {
           value={categoria}
           onChange={(e) => setCategoria(e.target.value)}
         >
-          <option value="">GENERAL</option>
-          <option value="Hogar">HOGAR</option>
-          <option value="Electronica">ELECTRONICA</option>
-          <option value="Artesanias">ARTESANIAS</option>
-          <option value="Ropa">ROPA</option>
-          <option value="Vehiculos">VEHICULOS</option>
+          <option value="">General</option>
+          <option value="Hogar">Hogar</option>
+          <option value="Electronica">Electronica</option>
+          <option value="Artesanias">Artesanias</option>
+          <option value="Ropa">Ropa</option>
+          <option value="Vehiculos">Vehiculos</option>
+          <option value="Cosmeticos">Cosmeticos</option>
         </select>
       </section>
 
@@ -221,7 +231,10 @@ export default function Home() {
         <div className="nav-box">
           <button
             className={vista === "subastas" ? "active" : ""}
-            onClick={() => setVista("subastas")}
+            onClick={() => {
+              setVista("subastas");
+              setSubastas(subastasOriginal);
+            }}
           >
             Subastas
           </button>
@@ -242,19 +255,15 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* ANIMACIÓN */}
       <div className="home-content">
         <SwitchTransition>
           <CSSTransition
             key={vista}
             timeout={300}
             classNames="fade"
-            nodeRef={nodeRef}
             unmountOnExit
           >
-            <div ref={nodeRef} className="vista fade-content">
-              {renderVista()}
-            </div>
+            <div className="vista fade-content">{renderVista()}</div>
           </CSSTransition>
         </SwitchTransition>
       </div>
@@ -264,7 +273,7 @@ export default function Home() {
         {selectedSubasta && (
           <SubastaDetails
             {...selectedSubasta}
-            imagenes={selectedSubasta.imagenes ?? []}
+            imagenes={selectedSubasta?.imagenes ?? []}
           />
         )}
       </Modal>
