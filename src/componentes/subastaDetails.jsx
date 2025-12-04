@@ -18,7 +18,7 @@ export default function SubastaDetails({
   );
 
   const user = JSON.parse(localStorage.getItem("user"));
-  console.log(user?.usuario?.id);
+
   const handlePujar = async () => {
     if (!monto || Number(monto) <= (puja_actual?.monto ?? precio_base)) {
       alert("La puja debe ser mayor a la actual.");
@@ -38,6 +38,7 @@ export default function SubastaDetails({
           }),
         }
       );
+
       /*   id_usuario=data['id_usuario'],
                 id_subasta=id_subasta,
                 puja=data['puja']*/
