@@ -10,23 +10,35 @@ export default function SubastaDetails({
   precio_base,
   puja_actual,
   imagenes,
+  iduser,
 }) {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [monto, setMonto] = useState("");
+<<<<<<< HEAD
   const [user, setUser] = useState(null);
+=======
+  const [id, setId] = useState("iudas");
+>>>>>>> d0c376fe2118d8d64d23ce618b03a27c58031107
   const [imagenActual, setImagenActual] = useState(
     imagenes[0] || "https://picsum.photos/400/300"
   );
 
   useEffect(() => {
+<<<<<<< HEAD
     const stored = localStorage.getItem("user");
     const userParsed = stored ? JSON.parse(stored) : null;
     setUser(userParsed);
+=======
+    const stored = localStorage.getItem("iduser");
+    console.log(stored);
+    setId(stored);
+>>>>>>> d0c376fe2118d8d64d23ce618b03a27c58031107
   }, []);
 
   const handlePujar = async () => {
-
+    alert(iduser);
     try {
+<<<<<<< HEAD
       const response = await fetch("https://tiphonne-api-render.onrender.com/pujas", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -37,6 +49,24 @@ export default function SubastaDetails({
         }),
 
       });
+=======
+      console.log("monto" + monto);
+      console.log("id" + id);
+      console.log("id subasta" + id_subasta);
+      const response = await fetch(
+        "http://tu-servidor.com/subastas/${idSubasta}/pujas",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id_usuario_pujador: id,
+            id_subasta: id_subasta,
+            monto: monto,
+          }),
+        }
+      );
+
+>>>>>>> d0c376fe2118d8d64d23ce618b03a27c58031107
       const data = await response.json();
       console.log("Puja enviada:", data);
 

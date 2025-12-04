@@ -13,10 +13,9 @@ export default function Home() {
   const [configOpen, setConfigOpen] = useState(false);
   const [usuario, setUsuario] = useState(null);
   const [vista, setVista] = useState("subastas");
-
   const [busqueda, setBusqueda] = useState("");
   const [categoria, setCategoria] = useState("");
-
+  const [userid, setUserId] = useState(null);
   const [subastas, setSubastas] = useState([]);
 
   const navigate = useNavigate();
@@ -27,7 +26,9 @@ export default function Home() {
   useEffect(() => {
     const stored = localStorage.getItem("user");
     const userParsed = stored ? JSON.parse(stored) : null;
+    const idStored = localStorage.getItem("iduser");
     setUsuario(userParsed);
+    setUserId(idStored);
   }, []);
 
   // ===============================
@@ -123,6 +124,7 @@ export default function Home() {
                   imagen={subasta.imagen}
                   precio={subasta.precio_inicial}
                   fechafin={subasta.fecha_fin}
+                  iduser={userid}
                 />
               </div>
             ))}
@@ -186,6 +188,7 @@ export default function Home() {
         setConfigOpen={setConfigOpen}
         logout={logout}
         user={usuario}
+        userid={userid}
       />
 
       {/* 🔍 BARRA DE BÚSQUEDA */}
