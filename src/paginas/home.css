@@ -200,3 +200,48 @@
   transition: opacity 300ms ease;
 }
 
+/*
+ESTO ES PARTE DE LA BARRA DE BUSQUEDA
+NO LO TOQUEN
+*/
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 20px;
+}
+
+.search-icon {
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.search-input {
+  flex: 1;
+  color: black;           
+  background: white;
+  border: 1px solid #ccc;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.search-input::placeholder {
+  color: #666;
+}
+
+.filter-select {
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: white;
+  color: black;             
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.filter-select option {
+  color: black;
+  background: white;
+}
+

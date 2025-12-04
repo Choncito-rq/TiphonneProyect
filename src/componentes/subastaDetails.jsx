@@ -27,7 +27,7 @@ export default function SubastaDetails({
   const handlePujar = async () => {
 
     try {
-      const response = await fetch("http://tu-servidor.com/subastas/${idSubasta}/pujas", {
+      const response = await fetch("https://tiphonne-api-render.onrender.com/pujas", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

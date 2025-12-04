@@ -14,6 +14,9 @@ export default function Home() {
   const [usuario, setUsuario] = useState(null);
   const [vista, setVista] = useState("subastas");
 
+  const [busqueda, setBusqueda] = useState("");
+  const [categoria, setCategoria] = useState("");
+
   const [subastas, setSubastas] = useState([]);
 
   const navigate = useNavigate();
@@ -52,10 +55,29 @@ export default function Home() {
       fecha_inicio: s.fecha_ini,
       fecha_fin: s.fecha_fin,
       creador: s.id_usuario_creador,
+      categoria: s.categoria ?? "",
     }));
 
     setSubastas(formato);
   }
+
+  // ===============================
+  // FUNCIÓN DE BÚSQUEDA
+  // ===============================
+  const realizarBusqueda = () => {
+    const filtradas = subastas.filter((s) => {
+      const coincideBusqueda = s.titulo
+        .toLowerCase()
+        .includes(busqueda.toLowerCase());
+
+      const coincideCategoria =
+        categoria === "" || s.categoria === categoria;
+
+      return coincideBusqueda && coincideCategoria;
+    });
+
+    setSubastas(filtradas);
+  };
 
   // ===============================
   // MODAL DE DETALLES
@@ -75,11 +97,11 @@ export default function Home() {
   // ===============================
   const logout = () => {
     localStorage.removeItem("user");
-    navigate("/", { replace: true }); // evita regresar con botón atrás
+    navigate("/", { replace: true });
   };
 
   // ===============================
-  // CAMBIO DE VISTA
+  // RENDER DE VISTAS
   // ===============================
   const renderVista = () => {
     if (vista === "subastas") {
@@ -88,9 +110,7 @@ export default function Home() {
           <section className="home-header">
             <div>
               <h1>Subastas Disponibles</h1>
-              <p>
-                Explora artículos interesantes y participa en pujas activas.
-              </p>
+              <p>Explora artículos interesantes y participa en pujas activas.</p>
             </div>
           </section>
 
@@ -168,6 +188,40 @@ export default function Home() {
         user={usuario}
       />
 
+      {/* 🔍 BARRA DE BÚSQUEDA */}
+      <section className="search-bar">
+        <span
+          className="search-icon"
+          onClick={realizarBusqueda}
+          style={{ cursor: "pointer" }}
+        >
+          🔍
+        </span>
+
+        <input
+          type="text"
+          placeholder="Buscar..."
+          className="search-input"
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && realizarBusqueda()}
+        />
+
+        <select
+          className="filter-select"
+          value={categoria}
+          onChange={(e) => setCategoria(e.target.value)}
+        >
+          <option value="">GENERAL</option>
+          <option value="Hogar">HOGAR</option>
+          <option value="Electronica">ELECTRONICA</option>
+          <option value="Artesanias">ARTESANIAS</option>
+          <option value="Ropa">ROPA</option>
+          <option value="Vehiculos">VEHICULOS</option>
+        </select>
+      </section>
+
+      {/* NAVEGACIÓN */}
       <nav className="home-nav">
         <div className="nav-box">
           <button
@@ -206,7 +260,7 @@ export default function Home() {
         </SwitchTransition>
       </div>
 
-      {/* MODAL DE DETALLES */}
+      {/* MODAL */}
       <Modal isOpen={isOpen} onClose={handleClose}>
         {selectedSubasta && (
           <SubastaDetails
