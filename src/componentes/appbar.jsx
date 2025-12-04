@@ -10,8 +10,6 @@ export default function Appbar({ configOpen, setConfigOpen, user, userid }) {
       <header className="appbar">
         <h1 className="logo">Tiphonne</h1>
 
-        {/* ÍCONO que abre el panel */}
-
         <img
           src={menuIcon}
           alt="menu"
@@ -20,15 +18,15 @@ export default function Appbar({ configOpen, setConfigOpen, user, userid }) {
         />
       </header>
 
-      {/* PANEL DE CONFIGURACIÓN */}
       {configOpen && (
         <div className="config-overlay" onClick={() => setConfigOpen(false)}>
           <div className="config-panel" onClick={(e) => e.stopPropagation()}>
-            <h2> Configuración</h2>
+            <h2>Configuración</h2>
 
-            {/* perfil */}
+            {/* PERFIL */}
             <section className="config-section">
               <h3>Mi Cuenta</h3>
+
               <p>
                 <strong>Usuario:</strong> {user?.usuario?.nombre1}
               </p>
@@ -44,17 +42,21 @@ export default function Appbar({ configOpen, setConfigOpen, user, userid }) {
                 Editar perfil
               </button>
 
-              <button className="config-btn">Cambiar contraseña</button>
+              <button
+                className="config-btn"
+                onClick={() => navigate("/Recovered")}
+              >
+                Cambiar contraseña
+              </button>
             </section>
 
             {/* SUBASTAS */}
             <section className="config-section">
               <h3>Mis Subastas</h3>
-
               <button className="config-btn">Historial de pujas</button>
             </section>
 
-            {/* SI EL USUARIO TAMBIÉN VENDE */}
+            {/* PARA VENDEDORES */}
             <section className="config-section">
               <h3>Subastar...</h3>
 
@@ -64,9 +66,9 @@ export default function Appbar({ configOpen, setConfigOpen, user, userid }) {
               >
                 Crear Subasta
               </button>
+
               <button className="config-btn">Mis artículos publicados</button>
               <button className="config-btn">Artículos vendidos</button>
-              {/*subastas que ya finalizaron y que son del current user*/}
             </section>
 
             {/* NAVEGACIÓN */}
@@ -83,7 +85,8 @@ export default function Appbar({ configOpen, setConfigOpen, user, userid }) {
 
             {/* SOPORTE */}
             <section className="config-section">
-              <h3> Ayuda</h3>1
+              <h3>Ayuda</h3>
+
               <button className="config-btn">Centro de ayuda</button>
               <button className="config-btn">Reportar problema</button>
               <button className="config-btn">Términos y condiciones</button>
