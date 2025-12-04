@@ -20,9 +20,7 @@ export default function Home() {
 
   const navigate = useNavigate();
 
-  // ===============================
-  // CARGAR USUARIO
-  // ===============================
+
   useEffect(() => {
     const stored = localStorage.getItem("user");
     const userParsed = stored ? JSON.parse(stored) : null;
@@ -31,9 +29,7 @@ export default function Home() {
     setUserId(idStored);
   }, []);
 
-  // ===============================
-  // CARGAR SUBASTAS
-  // ===============================
+
   useEffect(() => {
     cargarSubastas();
   }, []);
@@ -56,23 +52,20 @@ export default function Home() {
       fecha_inicio: s.fecha_ini,
       fecha_fin: s.fecha_fin,
       creador: s.id_usuario_creador,
-      categoria: s.categoria ?? "",
     }));
 
     setSubastas(formato);
   }
 
-  // ===============================
-  // FUNCIÓN DE BÚSQUEDA
-  // ===============================
-  const realizarBusqueda = () => {
+
+  const realizarBusqueda = () => { //ESTO AUN ESTA EN ETAPAS DE DESARROLLO
     const filtradas = subastas.filter((s) => {
       const coincideBusqueda = s.titulo
         .toLowerCase()
         .includes(busqueda.toLowerCase());
 
       const coincideCategoria =
-        categoria === "" || s.categoria === categoria;
+        categoria === "" || s.categoria === categoria; //INEXISTENTE
 
       return coincideBusqueda && coincideCategoria;
     });
@@ -80,9 +73,7 @@ export default function Home() {
     setSubastas(filtradas);
   };
 
-  // ===============================
-  // MODAL DE DETALLES
-  // ===============================
+
   const handleOpen = (subasta) => {
     setSelectedSubasta(subasta);
     setIsOpen(true);
@@ -93,17 +84,12 @@ export default function Home() {
     setIsOpen(false);
   };
 
-  // ===============================
-  // LOGOUT
-  // ===============================
+
   const logout = () => {
     localStorage.removeItem("user");
     navigate("/", { replace: true });
   };
 
-  // ===============================
-  // RENDER DE VISTAS
-  // ===============================
   const renderVista = () => {
     if (vista === "subastas") {
       return (
@@ -178,9 +164,7 @@ export default function Home() {
     }
   };
 
-  // ===============================
-  // RENDER PRINCIPAL
-  // ===============================
+
   return (
     <>
       <Appbar
