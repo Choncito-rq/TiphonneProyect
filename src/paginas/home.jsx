@@ -16,39 +16,41 @@ export default function Home() {
   const [vista, setVista] = useState("subastas");
   const [busqueda, setBusqueda] = useState("");
   const [categoria, setCategoria] = useState("");
-  const [userid, setUserId] = useState(null);
   const [subastas, setSubastas] = useState([]);
   const [subastasOriginal, setSubastasOriginal] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const nodeRef = useRef(null);
 
+  // ----------------------------
+  // CARGAR USUARIO DE LOCALSTORAGE
+  // ----------------------------
   useEffect(() => {
     const stored = localStorage.getItem("user");
-    const idStored = localStorage.getItem("iduser");
     setUsuario(stored ? JSON.parse(stored) : null);
-    setUserId(idStored);
   }, []);
 
+  // ----------------------------
+  // CARGAR SUBASTAS
+  // ----------------------------
   useEffect(() => {
     cargarSubastas();
   }, []);
 
-  // ⬇️ NORMALIZACIÓN ROBUSTA
+  // Normaliza la lista de categorías
   function normalizarCategorias(raw) {
     if (!raw) return [];
-
-    // Si ya es lista → OK
     if (Array.isArray(raw)) return raw;
 
-    // Si es string → intentar JSON
     if (typeof raw === "string") {
       try {
         const json = JSON.parse(raw);
         if (Array.isArray(json)) return json;
       } catch {
-        // Si no es JSON → separar por comas
-        return raw.split(",").map(c => c.trim()).filter(c => c !== "");
+        return raw
+          .split(",")
+          .map((c) => c.trim())
+          .filter((c) => c !== "");
       }
     }
 
@@ -58,16 +60,18 @@ export default function Home() {
   async function cargarSubastas() {
     setLoading(true);
 
-    const response = await fetch("https://tiphonne-api-render.onrender.com/subastas");
+    const response = await fetch(
+      "https://tiphonne-api-render.onrender.com/subastas"
+    );
     const data = await response.json();
 
     const formato = data.map((s) => {
       let imagenes = [];
 
-      if (Array.isArray(s.urls_imgs)) imagenes = s.urls_imgs;
-      else if (typeof s.urls_imgs === "string") {
+      if (Array.isArray(s.urls_imagenes)) imagenes = s.urls_imagenes;
+      else if (typeof s.urls_imagenes === "string") {
         try {
-          imagenes = JSON.parse(s.urls_imgs);
+          imagenes = JSON.parse(s.urls_imagenes);
         } catch {
           imagenes = [];
         }
@@ -84,7 +88,10 @@ export default function Home() {
         puja_actual: s.puja_actual,
         fecha_inicio: s.fecha_ini,
         fecha_fin: s.fecha_fin,
-        creador: s.id_usuario,
+
+        // CORREGIDO (ANTES estaba s.id_usuario)
+        creador: s.id_usuario_creador,
+
         categorias: normalizarCategorias(s.categorias),
       };
     });
@@ -94,13 +101,15 @@ export default function Home() {
     setLoading(false);
   }
 
+  // ----------------------------
+  // FILTRO DE BÚSQUEDA
+  // ----------------------------
   const realizarBusqueda = () => {
     const texto = (busqueda || "").toLowerCase();
     const cat = categoria === "" || categoria === "General" ? null : categoria;
 
     const filtradas = subastasOriginal.filter((s) => {
       const titulo = s.titulo ? s.titulo.toLowerCase() : "";
-
       const coincideBusqueda = titulo.includes(texto);
       const coincideCategoria =
         !cat || (s.categorias && s.categorias.includes(cat));
@@ -111,6 +120,9 @@ export default function Home() {
     setSubastas(filtradas);
   };
 
+  // ----------------------------
+  // ABRIR / CERRAR MODAL
+  // ----------------------------
   const handleOpen = (subasta) => {
     setSelectedSubasta(subasta);
     setIsOpen(true);
@@ -121,19 +133,29 @@ export default function Home() {
     setIsOpen(false);
   };
 
+  // ----------------------------
+  // CERRAR SESIÓN
+  // ----------------------------
   const logout = () => {
     localStorage.removeItem("user");
     navigate("/", { replace: true });
   };
 
+  // ----------------------------
+  // RENDER DE VISTAS
+  // ----------------------------
   const renderVista = () => {
+    const idUserActual = usuario?.usuario?.id;
+
     if (vista === "subastas") {
       return (
         <>
           <section className="home-header">
             <div>
               <h1>Subastas Disponibles</h1>
-              <p>Explora artículos interesantes y participa en pujas activas.</p>
+              <p>
+                Explora artículos interesantes y participa en pujas activas.
+              </p>
             </div>
           </section>
 
@@ -146,7 +168,8 @@ export default function Home() {
                   imagen={subasta.imagen}
                   precio={subasta.precio_inicial}
                   fechafin={subasta.fecha_fin}
-                  iduser={userid}
+                  // CORREGIDO
+                  iduser={idUserActual}
                 />
               </div>
             ))}
@@ -156,9 +179,7 @@ export default function Home() {
     }
 
     if (vista === "mis-subastas") {
-      const mias = subastasOriginal.filter(
-        (s) => s.creador === usuario?.usuario?.id
-      );
+      const mias = subastasOriginal.filter((s) => s.creador === idUserActual);
 
       return (
         <>
@@ -200,9 +221,9 @@ export default function Home() {
         setConfigOpen={setConfigOpen}
         logout={logout}
         user={usuario}
-        userid={userid}
       />
 
+      {/* Barra de búsqueda */}
       <section className="search-bar">
         <span className="search-icon" onClick={realizarBusqueda}>
           <img src={searchIcon} alt="Buscar" />
@@ -234,6 +255,7 @@ export default function Home() {
         </select>
       </section>
 
+      {/* Navegación */}
       <nav className="home-nav">
         <div className="nav-box">
           <button
@@ -255,6 +277,7 @@ export default function Home() {
         </div>
       </nav>
 
+      {/* Contenido con transición */}
       <div className="home-content">
         {loading ? (
           <div style={{ textAlign: "center", padding: "40px" }}>
@@ -277,6 +300,7 @@ export default function Home() {
         )}
       </div>
 
+      {/* MODAL */}
       <Modal isOpen={isOpen} onClose={handleClose}>
         {selectedSubasta && (
           <SubastaDetails
@@ -288,6 +312,8 @@ export default function Home() {
             precio_base={selectedSubasta.precio_base}
             puja_actual={selectedSubasta.puja_actual}
             imagenes={selectedSubasta.imagenes}
+            // ✔ CORREGIDO — ahora podrás detectar si el usuario es dueño
+            id_usuario_creador={selectedSubasta.creador}
           />
         )}
       </Modal>

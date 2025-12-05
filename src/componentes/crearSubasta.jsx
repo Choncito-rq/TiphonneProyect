@@ -28,12 +28,14 @@ export default function CrearSubasta() {
     "Coleccionismo",
     "Deportes",
     "Juguetes",
-    "Salud"
+    "Salud",
   ];
 
   useEffect(() => {
     const stored = localStorage.getItem("user");
+
     const parsed = stored ? JSON.parse(stored) : null;
+
     setUsuario(parsed);
   }, []);
 
@@ -71,7 +73,9 @@ export default function CrearSubasta() {
 
   const toggleCategoria = (cat) => {
     if (categoriasSeleccionadas.includes(cat)) {
-      setCategoriasSeleccionadas(categoriasSeleccionadas.filter(c => c !== cat));
+      setCategoriasSeleccionadas(
+        categoriasSeleccionadas.filter((c) => c !== cat)
+      );
       return;
     }
     if (categoriasSeleccionadas.length >= 4) {
@@ -114,8 +118,9 @@ export default function CrearSubasta() {
       precio_base: parseFloat(precioBase),
       urls_imgs: urls,
       titulo: titulo,
-      categorias: categoriasSeleccionadas.join(",")
+      categorias: categoriasSeleccionadas,
     };
+    console.log(data);
 
     try {
       const res = await fetch(
@@ -242,9 +247,7 @@ export default function CrearSubasta() {
           </div>
         )}
 
-        {subiendo && (
-          <p style={{ color: "#6da8ff" }}>Subiendo imágenes...</p>
-        )}
+        {subiendo && <p style={{ color: "#6da8ff" }}>Subiendo imágenes...</p>}
 
         <button className="btn-guardar" onClick={crearSubasta}>
           Crear Subasta

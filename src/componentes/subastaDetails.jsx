@@ -10,6 +10,7 @@ export default function SubastaDetails({
   precio_base,
   puja_actual,
   imagenes = [],
+  id_usuario_creador, // ← AGREGADO
 }) {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [monto, setMonto] = useState("");
@@ -18,11 +19,28 @@ export default function SubastaDetails({
   );
 
   const user = JSON.parse(localStorage.getItem("user"));
+  const idUser = user?.usuario?.id;
 
-  const esDuenioDeLaPuja =
-    puja_actual?.id_usuario_pujador === user?.usuario?.id;
+  // Si el usuario actual es el dueño de la última puja
+  const esDuenioDeLaPuja = puja_actual?.id_usuario_pujador === idUser;
+
+  // Si el usuario actual creó la subasta
+  const esDuenioDeLaSubasta = id_usuario_creador === idUser;
 
   const handlePujar = async () => {
+    // Evitar que el dueño de la subasta puje
+    if (esDuenioDeLaSubasta) {
+      alert("No puedes pujar en tu propia subasta.");
+      return;
+    }
+
+    // Evitar que supere su propia puja
+    if (esDuenioDeLaPuja) {
+      alert("No puedes superar tu propia oferta.");
+      return;
+    }
+
+    // Validar monto mayor
     if (!monto || Number(monto) <= (puja_actual?.monto ?? precio_base)) {
       alert("La puja debe ser mayor a la actual.");
       return;
@@ -35,7 +53,7 @@ export default function SubastaDetails({
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            id_usuario: user?.usuario?.id,
+            id_usuario: idUser,
             puja: monto,
           }),
         }
@@ -93,11 +111,18 @@ export default function SubastaDetails({
             <p className="duenio-oferta">Eres dueño de la oferta más alta</p>
           )}
 
+          {esDuenioDeLaSubasta && (
+            <p className="duenio-subasta">
+              Eres el creador de la subasta. No puedes pujar.
+            </p>
+          )}
+
           <p className="current-bid">
             Puja actual: <span>{puja_actual?.monto ?? precio_base}</span>
           </p>
 
-          {!esDuenioDeLaPuja && (
+          {/* Mostrar botones solo si NO es dueño */}
+          {!esDuenioDeLaPuja && !esDuenioDeLaSubasta && (
             <div className="bid-actions">
               <button
                 className="primary-btn"
@@ -126,6 +151,7 @@ export default function SubastaDetails({
         <div className="modal-backdrop">
           <div className="modal">
             <h3>Realizar puja</h3>
+
             <input
               type="number"
               min="1"
@@ -133,9 +159,11 @@ export default function SubastaDetails({
               onChange={(e) => setMonto(e.target.value)}
               placeholder="Ingresa tu oferta"
             />
+
             <button className="primary-btn" onClick={handlePujar}>
               Confirmar
             </button>
+
             <button
               className="secondary-btn"
               onClick={() => setMostrarModal(false)}
