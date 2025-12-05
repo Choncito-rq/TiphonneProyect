@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./crearSubasta.css";
+import { useNavigate } from "react-router-dom";
 
 export default function CrearSubasta() {
   const [descripcion, setDescripcion] = useState("");
@@ -14,16 +15,21 @@ export default function CrearSubasta() {
   const [categoriasOpen, setCategoriasOpen] = useState(false);
   const [categoriasSeleccionadas, setCategoriasSeleccionadas] = useState([]);
 
+  const navigate = useNavigate();
+
   const listaCategorias = [
+    "Tecnología",
     "Hogar",
     "Electrónica",
-    "Artesanías",
-    "Ropa",
+    "Artesanias",
     "Vehículos",
-    "Cosméticos",
-    "Joyería",
-    "Deportes",
+    "Ropa",
+    "Arte",
     "Mascotas",
+    "Coleccionismo",
+    "Deportes",
+    "Juguetes",
+    "Salud"
   ];
 
   useEffect(() => {
@@ -47,11 +53,7 @@ export default function CrearSubasta() {
     );
 
     const json = await res.json();
-    if (!json.secure_url) {
-      console.error("Error subiendo a Cloudinary:", json);
-      return null;
-    }
-
+    if (!json.secure_url) return null;
     return json.secure_url;
   };
 
@@ -73,16 +75,14 @@ export default function CrearSubasta() {
 
   const toggleCategoria = (cat) => {
     if (categoriasSeleccionadas.includes(cat)) {
-      setCategoriasSeleccionadas((prev) => prev.filter((c) => c !== cat));
+      setCategoriasSeleccionadas(categoriasSeleccionadas.filter(c => c !== cat));
       return;
     }
-
     if (categoriasSeleccionadas.length >= 4) {
-      alert("Máximo 4 categorías.");
+      alert("Máximo 4 categorías");
       return;
     }
-
-    setCategoriasSeleccionadas((prev) => [...prev, cat]);
+    setCategoriasSeleccionadas([...categoriasSeleccionadas, cat]);
   };
 
   const crearSubasta = async () => {
@@ -91,7 +91,7 @@ export default function CrearSubasta() {
     }
 
     if (categoriasSeleccionadas.length === 0) {
-      return alert("Selecciona al menos una categoría.");
+      return alert("Debes seleccionar al menos una categoría.");
     }
 
     if (imagenesFiles.length === 0) {
@@ -111,10 +111,10 @@ export default function CrearSubasta() {
     const data = {
       id_usuario: usuario.usuario.id,
       fecha_fin: fechaFin,
-      descripcion,
-      precio_base: precioBase,
+      descripcion: descripcion,
+      precio_base: parseFloat(precioBase),
       urls_imgs: urls,
-      titulo,
+      titulo: titulo,
       categorias: categoriasSeleccionadas,
     };
 
@@ -128,13 +128,12 @@ export default function CrearSubasta() {
         }
       );
 
-      const json = await res.json();
-      console.log("Subasta creada:", json);
+      await res.json();
       alert("Subasta creada con éxito");
 
       setImagenesPreview([]);
       setImagenesFiles([]);
-      setCategoriasSeleccionadas([]);
+      navigate(-1);
     } catch (error) {
       console.error(error);
       alert("Error al crear la subasta");
@@ -143,6 +142,12 @@ export default function CrearSubasta() {
 
   return (
     <section className="perfil-container">
+
+      {/* Botón Volver */}
+      <button className="btn-back-fixed" onClick={() => navigate(-1)}>
+        Volver
+      </button>
+
       <div className="perfil-card">
         <div className="perfil-header">
           <h2>Crear Subasta</h2>
@@ -166,63 +171,62 @@ export default function CrearSubasta() {
           ></textarea>
         </div>
 
-        <div className="input-group">
-          <label>Precio base</label>
-          <input
-            type="number"
-            value={precioBase}
-            onChange={(e) => setPrecioBase(e.target.value)}
-          />
-        </div>
+        <div className="grid-2">
+          <div className="input-group">
+            <label>Precio base</label>
+            <input
+              type="number"
+              value={precioBase}
+              onChange={(e) => setPrecioBase(e.target.value)}
+            />
+          </div>
 
-        <div className="input-group">
-          <label>Fecha fin</label>
-          <input
-            type="datetime-local"
-            value={fechaFin}
-            onChange={(e) => setFechaFin(e.target.value)}
-          />
+          <div className="input-group">
+            <label>Fecha fin</label>
+            <input
+              type="datetime-local"
+              value={fechaFin}
+              onChange={(e) => setFechaFin(e.target.value)}
+            />
+          </div>
         </div>
 
         <div className="input-group">
           <label>Categorías</label>
+
           <button
             className="btn-categorias"
             onClick={() => setCategoriasOpen(!categoriasOpen)}
           >
             {categoriasOpen ? "Cerrar categorías" : "Seleccionar categorías"}
           </button>
-        </div>
 
-        {categoriasOpen && (
-          <div className="categoria-card">
-            {listaCategorias.map((cat, i) => (
-              <span
-                key={i}
-                className={
-                  categoriasSeleccionadas.includes(cat)
-                    ? "cat-tag selected"
-                    : "cat-tag"
-                }
-                onClick={() => toggleCategoria(cat)}
-              >
-                {cat}
-              </span>
-            ))}
-          </div>
-        )}
-
-        <div className="selected-cat-box">
-          {categoriasSeleccionadas.map((c, i) => (
-            <span key={i} className="cat-tag selected small">
-              {c}
-            </span>
-          ))}
+          {categoriasOpen && (
+            <div className="categorias-panel">
+              {listaCategorias.map((cat) => (
+                <div
+                  key={cat}
+                  className={
+                    "categoria-chip " +
+                    (categoriasSeleccionadas.includes(cat) ? "chip-activa" : "")
+                  }
+                  onClick={() => toggleCategoria(cat)}
+                >
+                  {cat}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="input-group">
           <label>Imágenes</label>
-          <input type="file" accept="image/*" multiple onChange={manejarImagenes} />
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={manejarImagenes}
+          />
         </div>
 
         {imagenesPreview.length > 0 && (
@@ -238,7 +242,9 @@ export default function CrearSubasta() {
           </div>
         )}
 
-        {subiendo && <p style={{ color: "#6da8ff" }}>Subiendo imágenes...</p>}
+        {subiendo && (
+          <p style={{ color: "#6da8ff" }}>Subiendo imágenes...</p>
+        )}
 
         <button className="btn-guardar" onClick={crearSubasta}>
           Crear Subasta
