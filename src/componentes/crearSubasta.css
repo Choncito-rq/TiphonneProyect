@@ -25,3 +25,51 @@
   border-radius: 12px;
   border: 2px solid #444;
 }
+
+.btn-categorias {
+  background: #1a73e8;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+}
+
+.categoria-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  background: #1e1e1e;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.cat-tag {
+  padding: 6px 12px;
+  background: #2b2b2b;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.cat-tag:hover {
+  background: #3a3a3a;
+}
+
+.cat-tag.selected {
+  background: #1a73e8;
+  color: white;
+}
+
+.cat-tag.small {
+  padding: 4px 8px;
+  font-size: 13px;
+}
+
+.selected-cat-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
