@@ -74,7 +74,6 @@ export default function Appbar({ configOpen, setConfigOpen, user, userid }) {
 
             {/* SUBASTAS */}
             <section className="config-section">
-              <h3>Mis Subastas</h3>
               <button
                 className="config-btn"
                 onClick={() => navigate("/mis-pujas")}
@@ -85,7 +84,7 @@ export default function Appbar({ configOpen, setConfigOpen, user, userid }) {
 
             {/* PARA VENDEDORES */}
             <section className="config-section">
-              <h3>Subastar...</h3>
+              <h3>Acciones</h3>
 
               <button
                 className="config-btn"

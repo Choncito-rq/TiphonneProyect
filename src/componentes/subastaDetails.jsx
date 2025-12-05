@@ -19,6 +19,10 @@ export default function SubastaDetails({
 
   const user = JSON.parse(localStorage.getItem("user"));
 
+  // 🔥 Verifica si el usuario es dueño de la puja más alta
+  const esDuenioDeLaPuja =
+    puja_actual?.id_usuario_pujador === user?.usuario?.id;
+
   const handlePujar = async () => {
     if (!monto || Number(monto) <= (puja_actual?.monto ?? precio_base)) {
       alert("La puja debe ser mayor a la actual.");
@@ -33,15 +37,11 @@ export default function SubastaDetails({
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             id_usuario: user?.usuario?.id,
-
             puja: monto,
           }),
         }
       );
 
-      /*   id_usuario=data['id_usuario'],
-                id_subasta=id_subasta,
-                puja=data['puja']*/
       const data = await response.json();
 
       if (!response.ok) {
@@ -90,21 +90,34 @@ export default function SubastaDetails({
         <div className="auction-right">
           <h2>{titulo}</h2>
 
+          {/* 🔥 MENSAJE SI ERES DUEÑO DE LA PUJA */}
+          {esDuenioDeLaPuja && (
+            <p className="duenio-oferta">Eres dueño de la oferta más alta</p>
+          )}
+
           <p className="current-bid">
             Puja actual: <span>{puja_actual?.monto ?? precio_base}</span>
           </p>
 
-          <div className="bid-actions">
-            <button
-              className="primary-btn"
-              onClick={() => setMostrarModal(true)}
-            >
-              Pujar
-            </button>
-            <button className="secondary-btn">Historial</button>
-          </div>
+          {/* 🔥 Oculta los botones si eres dueño de la puja */}
+          {!esDuenioDeLaPuja && (
+            <div className="bid-actions">
+              <button
+                className="primary-btn"
+                onClick={() => setMostrarModal(true)}
+              >
+                Pujar
+              </button>
+              <button className="secondary-btn">Historial</button>
+            </div>
+          )}
+
+          {esDuenioDeLaPuja && (
+            <p className="info-puja">No puedes superar tu propia puja.</p>
+          )}
 
           <p className="description">{descripcion}</p>
+
           <p className="dates">
             <span>Inicio:</span> {fecha_ini} <br />
             <span>Fin:</span> {fecha_fin}
