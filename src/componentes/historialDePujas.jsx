@@ -42,7 +42,7 @@ export default function MisPujas() {
 
   return (
     <div className="mis-pujas-container">
-      <h1>Mis Pujas</h1>
+      <h1 className="titu">Mis Pujas</h1>
 
       <table className="tabla-pujas">
         <thead>
@@ -55,7 +55,6 @@ export default function MisPujas() {
             <th>Fecha Inicio</th>
             <th>Fecha Fin</th>
             <th>Estado</th>
-            <th>Ver</th>
           </tr>
         </thead>
 
@@ -71,14 +70,6 @@ export default function MisPujas() {
               <td>{new Date(s.fecha_fin).toLocaleString()}</td>
               <td className={s.estado === 1 ? "activa" : "inactiva"}>
                 {s.estado === 1 ? "Activa" : "Finalizada"}
-              </td>
-              <td>
-                <button
-                  className="ver-btn"
-                  onClick={() => navigate(`/subasta/${s.id_subasta}`)}
-                >
-                  Ver
-                </button>
               </td>
             </tr>
           ))}

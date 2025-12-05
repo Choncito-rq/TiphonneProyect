@@ -5,7 +5,9 @@
   animation: fadeIn 0.3s ease;
   color: #222;
 }
-
+.mis-pujas-container h1{
+  color: #eee;
+}
 h1 {
   text-align: center;
   margin-bottom: 25px;
