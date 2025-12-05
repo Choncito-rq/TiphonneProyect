@@ -34,20 +34,40 @@ export default function Home() {
     cargarSubastas();
   }, []);
 
+  // ⬇️ NORMALIZACIÓN ROBUSTA
+  function normalizarCategorias(raw) {
+    if (!raw) return [];
+
+    // Si ya es lista → OK
+    if (Array.isArray(raw)) return raw;
+
+    // Si es string → intentar JSON
+    if (typeof raw === "string") {
+      try {
+        const json = JSON.parse(raw);
+        if (Array.isArray(json)) return json;
+      } catch {
+        // Si no es JSON → separar por comas
+        return raw.split(",").map(c => c.trim()).filter(c => c !== "");
+      }
+    }
+
+    return [];
+  }
+
   async function cargarSubastas() {
     setLoading(true);
-    const response = await fetch(
-      "https://tiphonne-api-render.onrender.com/subastas"
-    );
+
+    const response = await fetch("https://tiphonne-api-render.onrender.com/subastas");
     const data = await response.json();
 
     const formato = data.map((s) => {
       let imagenes = [];
 
-      if (Array.isArray(s.urls_imagenes)) imagenes = s.urls_imagenes;
-      else if (typeof s.urls_imagenes === "string") {
+      if (Array.isArray(s.urls_imgs)) imagenes = s.urls_imgs;
+      else if (typeof s.urls_imgs === "string") {
         try {
-          imagenes = JSON.parse(s.urls_imagenes);
+          imagenes = JSON.parse(s.urls_imgs);
         } catch {
           imagenes = [];
         }
@@ -64,8 +84,8 @@ export default function Home() {
         puja_actual: s.puja_actual,
         fecha_inicio: s.fecha_ini,
         fecha_fin: s.fecha_fin,
-        creador: s.id_usuario_creador,
-        categorias: s.categoria,
+        creador: s.id_usuario,
+        categorias: normalizarCategorias(s.categorias),
       };
     });
 
@@ -80,8 +100,10 @@ export default function Home() {
 
     const filtradas = subastasOriginal.filter((s) => {
       const titulo = s.titulo ? s.titulo.toLowerCase() : "";
+
       const coincideBusqueda = titulo.includes(texto);
-      const coincideCategoria = !cat || s.categoria === cat;
+      const coincideCategoria =
+        !cat || (s.categorias && s.categorias.includes(cat));
 
       return coincideBusqueda && coincideCategoria;
     });
@@ -111,9 +133,7 @@ export default function Home() {
           <section className="home-header">
             <div>
               <h1>Subastas Disponibles</h1>
-              <p>
-                Explora artículos interesantes y participa en pujas activas.
-              </p>
+              <p>Explora artículos interesantes y participa en pujas activas.</p>
             </div>
           </section>
 
@@ -184,11 +204,7 @@ export default function Home() {
       />
 
       <section className="search-bar">
-        <span
-          className="search-icon"
-          onClick={realizarBusqueda}
-          style={{ cursor: "pointer" }}
-        >
+        <span className="search-icon" onClick={realizarBusqueda}>
           <img src={searchIcon} alt="Buscar" />
         </span>
 
@@ -207,12 +223,14 @@ export default function Home() {
           onChange={(e) => setCategoria(e.target.value)}
         >
           <option value="">General</option>
+          <option value="Tecnología">Tecnología</option>
           <option value="Hogar">Hogar</option>
-          <option value="Electronica">Electronica</option>
+          <option value="Electrónica">Electrónica</option>
           <option value="Artesanias">Artesanias</option>
           <option value="Ropa">Ropa</option>
-          <option value="Vehiculos">Vehiculos</option>
-          <option value="Cosmeticos">Cosmeticos</option>
+          <option value="Vehículos">Vehículos</option>
+          <option value="Arte">Arte</option>
+          <option value="Mascotas">Mascotas</option>
         </select>
       </section>
 

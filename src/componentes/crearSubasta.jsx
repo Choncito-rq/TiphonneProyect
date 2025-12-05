@@ -11,7 +11,6 @@ export default function CrearSubasta() {
   const [subiendo, setSubiendo] = useState(false);
   const [titulo, setTitulo] = useState("");
   const [usuario, setUsuario] = useState(null);
-
   const [categoriasOpen, setCategoriasOpen] = useState(false);
   const [categoriasSeleccionadas, setCategoriasSeleccionadas] = useState([]);
 
@@ -46,10 +45,7 @@ export default function CrearSubasta() {
 
     const res = await fetch(
       "https://api.cloudinary.com/v1_1/dqjwp748k/image/upload",
-      {
-        method: "POST",
-        body: data,
-      }
+      { method: "POST", body: data }
     );
 
     const json = await res.json();
@@ -87,15 +83,18 @@ export default function CrearSubasta() {
 
   const crearSubasta = async () => {
     if (!descripcion || !precioBase || !fechaFin || !titulo) {
-      return alert("Todos los campos son obligatorios.");
+      alert("Todos los campos son obligatorios.");
+      return;
     }
 
     if (categoriasSeleccionadas.length === 0) {
-      return alert("Debes seleccionar al menos una categoría.");
+      alert("Debes seleccionar al menos una categoría.");
+      return;
     }
 
     if (imagenesFiles.length === 0) {
-      return alert("Debes seleccionar al menos una imagen.");
+      alert("Debes seleccionar al menos una imagen.");
+      return;
     }
 
     setSubiendo(true);
@@ -115,7 +114,7 @@ export default function CrearSubasta() {
       precio_base: parseFloat(precioBase),
       urls_imgs: urls,
       titulo: titulo,
-      categorias: categoriasSeleccionadas,
+      categorias: categoriasSeleccionadas.join(",")
     };
 
     try {
@@ -142,8 +141,6 @@ export default function CrearSubasta() {
 
   return (
     <section className="perfil-container">
-
-      {/* Botón Volver */}
       <button className="btn-back-fixed" onClick={() => navigate(-1)}>
         Volver
       </button>
@@ -234,7 +231,10 @@ export default function CrearSubasta() {
             {imagenesPreview.map((img, i) => (
               <div key={i} className="preview-item">
                 <img src={img.preview} alt="preview" />
-                <button className="btn-eliminar" onClick={() => eliminarImagen(i)}>
+                <button
+                  className="btn-eliminar"
+                  onClick={() => eliminarImagen(i)}
+                >
                   ✕
                 </button>
               </div>

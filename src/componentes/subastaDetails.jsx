@@ -19,7 +19,6 @@ export default function SubastaDetails({
 
   const user = JSON.parse(localStorage.getItem("user"));
 
-  // 🔥 Verifica si el usuario es dueño de la puja más alta
   const esDuenioDeLaPuja =
     puja_actual?.id_usuario_pujador === user?.usuario?.id;
 
@@ -90,7 +89,6 @@ export default function SubastaDetails({
         <div className="auction-right">
           <h2>{titulo}</h2>
 
-          {/* 🔥 MENSAJE SI ERES DUEÑO DE LA PUJA */}
           {esDuenioDeLaPuja && (
             <p className="duenio-oferta">Eres dueño de la oferta más alta</p>
           )}
@@ -99,7 +97,6 @@ export default function SubastaDetails({
             Puja actual: <span>{puja_actual?.monto ?? precio_base}</span>
           </p>
 
-          {/* 🔥 Oculta los botones si eres dueño de la puja */}
           {!esDuenioDeLaPuja && (
             <div className="bid-actions">
               <button
