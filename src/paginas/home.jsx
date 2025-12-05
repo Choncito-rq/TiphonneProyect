@@ -36,7 +36,9 @@ export default function Home() {
 
   async function cargarSubastas() {
     setLoading(true);
-    const response = await fetch("https://tiphonne-api-render.onrender.com/subastas");
+    const response = await fetch(
+      "https://tiphonne-api-render.onrender.com/subastas"
+    );
     const data = await response.json();
 
     const formato = data.map((s) => {
@@ -44,7 +46,11 @@ export default function Home() {
 
       if (Array.isArray(s.urls_imagenes)) imagenes = s.urls_imagenes;
       else if (typeof s.urls_imagenes === "string") {
-        try { imagenes = JSON.parse(s.urls_imagenes); } catch { imagenes = []; }
+        try {
+          imagenes = JSON.parse(s.urls_imagenes);
+        } catch {
+          imagenes = [];
+        }
       }
 
       return {
@@ -59,7 +65,7 @@ export default function Home() {
         fecha_inicio: s.fecha_ini,
         fecha_fin: s.fecha_fin,
         creador: s.id_usuario_creador,
-        categorias: s.categoria
+        categorias: s.categoria,
       };
     });
 
@@ -69,20 +75,19 @@ export default function Home() {
   }
 
   const realizarBusqueda = () => {
-  const texto = (busqueda || "").toLowerCase();
-  const cat = categoria === "" || categoria === "General" ? null : categoria;
+    const texto = (busqueda || "").toLowerCase();
+    const cat = categoria === "" || categoria === "General" ? null : categoria;
 
-  const filtradas = subastasOriginal.filter((s) => {
-    const titulo = s.titulo ? s.titulo.toLowerCase() : "";
-    const coincideBusqueda = titulo.includes(texto);
-    const coincideCategoria = !cat || s.categoria === cat;
+    const filtradas = subastasOriginal.filter((s) => {
+      const titulo = s.titulo ? s.titulo.toLowerCase() : "";
+      const coincideBusqueda = titulo.includes(texto);
+      const coincideCategoria = !cat || s.categoria === cat;
 
-    return coincideBusqueda && coincideCategoria;
-  });
+      return coincideBusqueda && coincideCategoria;
+    });
 
-  setSubastas(filtradas);
-};
-
+    setSubastas(filtradas);
+  };
 
   const handleOpen = (subasta) => {
     setSelectedSubasta(subasta);
@@ -106,7 +111,9 @@ export default function Home() {
           <section className="home-header">
             <div>
               <h1>Subastas Disponibles</h1>
-              <p>Explora artículos interesantes y participa en pujas activas.</p>
+              <p>
+                Explora artículos interesantes y participa en pujas activas.
+              </p>
             </div>
           </section>
 
@@ -144,7 +151,9 @@ export default function Home() {
 
           <div className="card-container">
             {mias.length === 0 ? (
-              <p style={{ textAlign: "center", width: "100%" }}>No tienes subastas creadas.</p>
+              <p style={{ textAlign: "center", width: "100%" }}>
+                No tienes subastas creadas.
+              </p>
             ) : (
               mias.map((subasta) => (
                 <div key={subasta.id} onClick={() => handleOpen(subasta)}>
@@ -160,15 +169,6 @@ export default function Home() {
             )}
           </div>
         </>
-      );
-    }
-
-    if (vista === "mis-pujas") {
-      return (
-        <section className="home-header">
-          <h1>Mis Pujas</h1>
-          <p>Aquí aparecen subastas donde participas.</p>
-        </section>
       );
     }
   };
@@ -233,13 +233,6 @@ export default function Home() {
             onClick={() => setVista("mis-subastas")}
           >
             Mis Subastas
-          </button>
-
-          <button
-            className={vista === "mis-pujas" ? "active" : ""}
-            onClick={() => setVista("mis-pujas")}
-          >
-            Mis Pujas
           </button>
         </div>
       </nav>
