@@ -30,7 +30,7 @@ export default function Home() {
   useEffect(() => {
     cargarSubastas();
   }, []);
-
+  console.log(usuario);
   function normalizarCategorias(raw) {
     if (!raw) return [];
     if (Array.isArray(raw)) return raw;
@@ -93,23 +93,22 @@ export default function Home() {
     setLoading(false);
   }
 
-
   const realizarBusqueda = () => {
-  const texto = (busqueda || "").toLowerCase();
-  const cat = categoria === "" || categoria === "Todo" ? null : categoria;
+    const texto = (busqueda || "").toLowerCase();
+    const cat = categoria === "" || categoria === "Todo" ? null : categoria;
 
-  const filtradas = subastasOriginal.filter((s) => {
-    const titulo = s.titulo ? s.titulo.toLowerCase() : "";
-    const coincideBusqueda = titulo.includes(texto);
-    const coincideCategoria = !cat || (s.categorias && s.categorias.includes(cat));
-    return coincideBusqueda && coincideCategoria;
-  });
+    const filtradas = subastasOriginal.filter((s) => {
+      const titulo = s.titulo ? s.titulo.toLowerCase() : "";
+      const coincideBusqueda = titulo.includes(texto);
+      const coincideCategoria =
+        !cat || (s.categorias && s.categorias.includes(cat));
+      return coincideBusqueda && coincideCategoria;
+    });
 
-  setSubastas(filtradas);
+    setSubastas(filtradas);
 
-  setCategoria(""); 
-};
-
+    setCategoria("");
+  };
 
   const handleOpen = (subasta) => {
     setSelectedSubasta(subasta);
@@ -201,7 +200,6 @@ export default function Home() {
         configOpen={configOpen}
         setConfigOpen={setConfigOpen}
         logout={logout}
-        user={usuario}
       />
 
       <section className="search-bar">

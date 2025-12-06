@@ -1,13 +1,18 @@
 import menuIcon from "../assets/menusss.svg";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./appbar.css";
 
-export default function Appbar({ configOpen, setConfigOpen, user, userid }) {
+export default function Appbar({ configOpen, setConfigOpen }) {
   const navigate = useNavigate();
   const [showPanel, setShowPanel] = useState(false);
+  const [usuario, setUsuario] = useState(null);
 
+  const user = JSON.parse(localStorage.getItem("user"));
   const abrirMenu = () => {
+    const stored = localStorage.getItem("user");
+    setUsuario(stored ? JSON.parse(stored) : null);
+
     setShowPanel(true);
     setConfigOpen(true);
   };
@@ -16,7 +21,10 @@ export default function Appbar({ configOpen, setConfigOpen, user, userid }) {
     setConfigOpen(false);
     setTimeout(() => setShowPanel(false), 250); // tiempo de animación
   };
-
+  useEffect(() => {
+    const stored = localStorage.getItem("user");
+    setUsuario(stored ? JSON.parse(stored) : null);
+  }, []);
   return (
     <>
       <header className="appbar">
@@ -50,11 +58,11 @@ export default function Appbar({ configOpen, setConfigOpen, user, userid }) {
               <h3>Mi Cuenta</h3>
 
               <p>
-                <strong>Usuario:</strong> {user?.usuario?.nombre1}
+                <strong>Usuario:</strong> {usuario?.usuario?.nom_1}
               </p>
               <p>
                 <strong>Correo:</strong>{" "}
-                {user?.usuario?.correo || "Desconocido"}
+                {usuario?.usuario?.correo || "Desconocido"}
               </p>
 
               <button

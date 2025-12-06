@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./historialDePujas.css";
+import iconback from "../assets/back_arrow.svg";
 
 export default function MisPujas() {
   const navigate = useNavigate();
@@ -42,7 +43,12 @@ export default function MisPujas() {
 
   return (
     <div className="mis-pujas-container">
-      <h1 className="titu">Mis Pujas</h1>
+      <div className="perfil-header">
+        <button className="btn-volver" onClick={() => navigate(-1)}>
+          <img src={iconback} alt="back" />
+        </button>
+        <h1 className="titu">Mis Pujas</h1>
+      </div>
 
       <table className="tabla-pujas">
         <thead>
