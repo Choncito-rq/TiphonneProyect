@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./subastaDetails.css";
 
 export default function SubastaDetails({
@@ -10,7 +10,8 @@ export default function SubastaDetails({
   precio_base,
   puja_actual,
   imagenes = [],
-  id_usuario_creador, // ← AGREGADO
+  id_usuario_creador,
+  categorias = [],
 }) {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [monto, setMonto] = useState("");
@@ -18,29 +19,81 @@ export default function SubastaDetails({
     imagenes[0] || "https://picsum.photos/400/300"
   );
 
+  // Estados editables SOLO para el dueño
+  const [tituloEdit, setTituloEdit] = useState(titulo);
+  const [descripcionEdit, setDescripcionEdit] = useState(descripcion);
+
   const user = JSON.parse(localStorage.getItem("user"));
   const idUser = user?.usuario?.id;
 
-  // Si el usuario actual es el dueño de la última puja
   const esDuenioDeLaPuja = puja_actual?.id_usuario_pujador === idUser;
-
-  // Si el usuario actual creó la subasta
   const esDuenioDeLaSubasta = id_usuario_creador === idUser;
+  const [tiempoRestante, setTiempoRestante] = useState("");
+  const calcularTiempoRestante = () => {
+    const fin = new Date(fecha_fin).getTime();
+    const ahora = Date.now();
+    const diferencia = fin - ahora;
+
+    if (diferencia <= 0) {
+      return "Finalizada";
+    }
+
+    const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+    const horas = Math.floor(
+      (diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
+    const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+    const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+
+    return `${dias}d ${horas}h ${minutos}m ${segundos}s`;
+  };
+  useEffect(() => {
+    setTiempoRestante(calcularTiempoRestante());
+
+    const interval = setInterval(() => {
+      setTiempoRestante(calcularTiempoRestante());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [fecha_fin]);
+
+  const handleGuardarCambios = async () => {
+    try {
+      const response = await fetch(
+        `https://tiphonne-api-render.onrender.com/subastas/${id_subasta}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            titulo: tituloEdit,
+            descripcion: descripcionEdit,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.error || "Error al actualizar la subasta");
+        return;
+      }
+
+      alert("Subasta actualizada correctamente");
+    } catch (e) {
+      alert("Error al guardar los cambios");
+    }
+  };
 
   const handlePujar = async () => {
-    // Evitar que el dueño de la subasta puje
     if (esDuenioDeLaSubasta) {
       alert("No puedes pujar en tu propia subasta.");
       return;
     }
-
-    // Evitar que supere su propia puja
     if (esDuenioDeLaPuja) {
       alert("No puedes superar tu propia oferta.");
       return;
     }
 
-    // Validar monto mayor
     if (!monto || Number(monto) <= (puja_actual?.monto ?? precio_base)) {
       alert("La puja debe ser mayor a la actual.");
       return;
@@ -60,7 +113,6 @@ export default function SubastaDetails({
       );
 
       const data = await response.json();
-
       if (!response.ok) {
         alert(data.error || "Error al realizar la puja");
         setMostrarModal(false);
@@ -85,7 +137,7 @@ export default function SubastaDetails({
           />
 
           <div className="image-thumbs">
-            {(imagenes.length > 0
+            {(imagenes.length
               ? imagenes
               : [
                   "https://picsum.photos/400/301",
@@ -105,23 +157,45 @@ export default function SubastaDetails({
         </div>
 
         <div className="auction-right">
-          <h2>{titulo}</h2>
+          {/* TÍTULO EDITABLE */}
+          <p className="time-left">
+            Tiempo restante: <span>{tiempoRestante}</span>
+          </p>
+          {esDuenioDeLaSubasta ? (
+            <input
+              className="editable-input"
+              value={tituloEdit}
+              onChange={(e) => setTituloEdit(e.target.value)}
+              maxLength={80}
+            />
+          ) : (
+            <h2>{titulo}</h2>
+          )}
+          {categorias.length > 0 && (
+            <div className="categorias-box">
+              <h4>Categorías:</h4>
+              <ul className="categoria-list">
+                {categorias.map((c, i) => (
+                  <li key={i} className="categoria-item">
+                    {c}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           {esDuenioDeLaPuja && (
             <p className="duenio-oferta">Eres dueño de la oferta más alta</p>
           )}
 
           {esDuenioDeLaSubasta && (
-            <p className="duenio-subasta">
-              Eres el creador de la subasta. No puedes pujar.
-            </p>
+            <p className="duenio-subasta">Eres el creador de la subasta.</p>
           )}
 
           <p className="current-bid">
             Puja actual: <span>{puja_actual?.monto ?? precio_base}</span>
           </p>
 
-          {/* Mostrar botones solo si NO es dueño */}
           {!esDuenioDeLaPuja && !esDuenioDeLaSubasta && (
             <div className="bid-actions">
               <button
@@ -134,16 +208,29 @@ export default function SubastaDetails({
             </div>
           )}
 
-          {esDuenioDeLaPuja && (
-            <p className="info-puja">No puedes superar tu propia puja.</p>
+          {/* DESCRIPCIÓN EDITABLE */}
+          {esDuenioDeLaSubasta ? (
+            <textarea
+              className="editable-textarea"
+              value={descripcionEdit}
+              onChange={(e) => setDescripcionEdit(e.target.value)}
+              maxLength={600}
+            />
+          ) : (
+            <p className="description">{descripcion}</p>
           )}
-
-          <p className="description">{descripcion}</p>
 
           <p className="dates">
             <span>Inicio:</span> {fecha_ini} <br />
             <span>Fin:</span> {fecha_fin}
           </p>
+
+          {/* BOTÓN GUARDAR CAMBIOS */}
+          {esDuenioDeLaSubasta && (
+            <button className="save-btn" onClick={handleGuardarCambios}>
+              Guardar cambios
+            </button>
+          )}
         </div>
       </article>
 
@@ -163,7 +250,6 @@ export default function SubastaDetails({
             <button className="primary-btn" onClick={handlePujar}>
               Confirmar
             </button>
-
             <button
               className="secondary-btn"
               onClick={() => setMostrarModal(false)}

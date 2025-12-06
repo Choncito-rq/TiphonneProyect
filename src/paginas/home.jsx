@@ -314,6 +314,7 @@ export default function Home() {
             imagenes={selectedSubasta.imagenes}
             // ✔ CORREGIDO — ahora podrás detectar si el usuario es dueño
             id_usuario_creador={selectedSubasta.creador}
+            categorias={selectedSubasta.categorias}
           />
         )}
       </Modal>
