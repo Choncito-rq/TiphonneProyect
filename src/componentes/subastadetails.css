@@ -1,24 +1,21 @@
-/* --- Layout General --- */
 .auction-details {
   display: flex;
   gap: 2rem;
   padding: 1.8rem;
-  background: #2b2b2b;          /* 🔥 fondo oscuro */
+  background: #2b2b2b;      
   border-radius: 18px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
   animation: fadeIn 0.3s ease;
   max-width: 900px;
   margin: auto;
-  color: #f5f5f5;               /* 🔥 texto claro */
+  color: #ffffff;          
 }
 
-/* Animación suave */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- Lado Izquierdo --- */
 .auction-left {
   flex: 1;
 }
@@ -35,7 +32,6 @@
   transform: scale(1.02);
 }
 
-/* Miniaturas */
 .image-thumbs {
   margin-top: 1rem;
   display: flex;
@@ -58,7 +54,6 @@
   transform: translateY(-3px);
 }
 
-/* --- Lado Derecho --- */
 .auction-right {
   flex: 1;
   display: flex;
@@ -80,23 +75,20 @@
 
 .auction-right p {
   margin: 0.3rem 0;
-  color: #dddddd;
+  color: #ffffff;
 }
 
-/* Descripción */
 .description {
   margin-top: 1rem;
   line-height: 1.5;
-  color: #cccccc;
+  color: #ffffff;
 }
 
-/* Fechas */
 .dates span {
   font-weight: 600;
   color: #ffffff;
 }
 
-/* --- Botones --- */
 .bid-actions {
   display: flex;
   gap: 1rem;
@@ -123,7 +115,7 @@
 .secondary-btn {
   padding: 10px 20px;
   background: #3b3b3b;        
-  color: #e5e5e5;
+  color: #ffffff;
   border: none;
   border-radius: 12px;
   cursor: pointer;
@@ -156,7 +148,7 @@
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
   text-align: center;
   animation: fadeIn 0.22s ease;
-  color: #f5f5f5;
+  color: #ffffff;
 }
 
 .modal input {
@@ -202,7 +194,7 @@
   height: 300px; 
   object-fit: contain;  
   border-radius: 10px;
-  background-color: #f3f3f3;
+  background-color: #ffffff;
 }
 
 .image-thumbs {
@@ -306,5 +298,5 @@
   padding: 4px 10px;
   border-radius: 8px;
   font-size: 0.85rem;
-  color: #333;
+  color: #ffffff;
 }

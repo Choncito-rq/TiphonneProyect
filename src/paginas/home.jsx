@@ -95,20 +95,21 @@ export default function Home() {
 
 
   const realizarBusqueda = () => {
-    const texto = (busqueda || "").toLowerCase();
-    const cat = categoria === "" || categoria === "General" ? null : categoria;
+  const texto = (busqueda || "").toLowerCase();
+  const cat = categoria === "" || categoria === "Todo" ? null : categoria;
 
-    const filtradas = subastasOriginal.filter((s) => {
-      const titulo = s.titulo ? s.titulo.toLowerCase() : "";
-      const coincideBusqueda = titulo.includes(texto);
-      const coincideCategoria =
-        !cat || (s.categorias && s.categorias.includes(cat));
+  const filtradas = subastasOriginal.filter((s) => {
+    const titulo = s.titulo ? s.titulo.toLowerCase() : "";
+    const coincideBusqueda = titulo.includes(texto);
+    const coincideCategoria = !cat || (s.categorias && s.categorias.includes(cat));
+    return coincideBusqueda && coincideCategoria;
+  });
 
-      return coincideBusqueda && coincideCategoria;
-    });
+  setSubastas(filtradas);
 
-    setSubastas(filtradas);
-  };
+  setCategoria(""); 
+};
+
 
   const handleOpen = (subasta) => {
     setSelectedSubasta(subasta);
@@ -149,7 +150,6 @@ export default function Home() {
                   imagen={subasta.imagen}
                   precio={subasta.precio_inicial}
                   fechafin={subasta.fecha_fin}
-                  // CORREGIDO
                   iduser={idUserActual}
                 />
               </div>
@@ -204,7 +204,6 @@ export default function Home() {
         user={usuario}
       />
 
-      {/* Barra de búsqueda */}
       <section className="search-bar">
         <span className="search-icon" onClick={realizarBusqueda}>
           <img src={searchIcon} alt="Buscar" />
@@ -224,7 +223,7 @@ export default function Home() {
           value={categoria}
           onChange={(e) => setCategoria(e.target.value)}
         >
-          <option value="">General</option>
+          <option value="">Todo</option>
           <option value="Tecnología">Tecnología</option>
           <option value="Hogar">Hogar</option>
           <option value="Electrónica">Electrónica</option>
