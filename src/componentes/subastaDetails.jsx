@@ -19,7 +19,6 @@ export default function SubastaDetails({
     imagenes[0] || "https://picsum.photos/400/300"
   );
 
-  // Estados editables SOLO para el dueño
   const [tituloEdit, setTituloEdit] = useState(titulo);
   const [descripcionEdit, setDescripcionEdit] = useState(descripcion);
 
@@ -157,7 +156,6 @@ export default function SubastaDetails({
         </div>
 
         <div className="auction-right">
-          {/* TÍTULO EDITABLE */}
           <p className="time-left">
             Tiempo restante: <span>{tiempoRestante}</span>
           </p>
@@ -208,7 +206,6 @@ export default function SubastaDetails({
             </div>
           )}
 
-          {/* DESCRIPCIÓN EDITABLE */}
           {esDuenioDeLaSubasta ? (
             <textarea
               className="editable-textarea"
@@ -225,7 +222,6 @@ export default function SubastaDetails({
             <span>Fin:</span> {fecha_fin}
           </p>
 
-          {/* BOTÓN GUARDAR CAMBIOS */}
           {esDuenioDeLaSubasta && (
             <button className="save-btn" onClick={handleGuardarCambios}>
               Guardar cambios

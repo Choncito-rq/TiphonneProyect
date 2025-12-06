@@ -22,22 +22,15 @@ export default function Home() {
   const navigate = useNavigate();
   const nodeRef = useRef(null);
 
-  // ----------------------------
-  // CARGAR USUARIO DE LOCALSTORAGE
-  // ----------------------------
   useEffect(() => {
     const stored = localStorage.getItem("user");
     setUsuario(stored ? JSON.parse(stored) : null);
   }, []);
 
-  // ----------------------------
-  // CARGAR SUBASTAS
-  // ----------------------------
   useEffect(() => {
     cargarSubastas();
   }, []);
 
-  // Normaliza la lista de categorías
   function normalizarCategorias(raw) {
     if (!raw) return [];
     if (Array.isArray(raw)) return raw;
@@ -89,7 +82,6 @@ export default function Home() {
         fecha_inicio: s.fecha_ini,
         fecha_fin: s.fecha_fin,
 
-        // CORREGIDO (ANTES estaba s.id_usuario)
         creador: s.id_usuario_creador,
 
         categorias: normalizarCategorias(s.categorias),
@@ -101,9 +93,7 @@ export default function Home() {
     setLoading(false);
   }
 
-  // ----------------------------
-  // FILTRO DE BÚSQUEDA
-  // ----------------------------
+
   const realizarBusqueda = () => {
     const texto = (busqueda || "").toLowerCase();
     const cat = categoria === "" || categoria === "General" ? null : categoria;
@@ -120,9 +110,6 @@ export default function Home() {
     setSubastas(filtradas);
   };
 
-  // ----------------------------
-  // ABRIR / CERRAR MODAL
-  // ----------------------------
   const handleOpen = (subasta) => {
     setSelectedSubasta(subasta);
     setIsOpen(true);
@@ -133,17 +120,11 @@ export default function Home() {
     setIsOpen(false);
   };
 
-  // ----------------------------
-  // CERRAR SESIÓN
-  // ----------------------------
   const logout = () => {
     localStorage.removeItem("user");
     navigate("/", { replace: true });
   };
 
-  // ----------------------------
-  // RENDER DE VISTAS
-  // ----------------------------
   const renderVista = () => {
     const idUserActual = usuario?.usuario?.id;
 
@@ -250,12 +231,13 @@ export default function Home() {
           <option value="Artesanias">Artesanias</option>
           <option value="Ropa">Ropa</option>
           <option value="Vehículos">Vehículos</option>
+          <option value="Coleccionismo">Coleccionismo</option>
+          <option value="Deportes">Deportes</option>
           <option value="Arte">Arte</option>
           <option value="Mascotas">Mascotas</option>
         </select>
       </section>
 
-      {/* Navegación */}
       <nav className="home-nav">
         <div className="nav-box">
           <button
@@ -277,7 +259,6 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Contenido con transición */}
       <div className="home-content">
         {loading ? (
           <div style={{ textAlign: "center", padding: "40px" }}>
@@ -300,7 +281,6 @@ export default function Home() {
         )}
       </div>
 
-      {/* MODAL */}
       <Modal isOpen={isOpen} onClose={handleClose}>
         {selectedSubasta && (
           <SubastaDetails
@@ -312,7 +292,6 @@ export default function Home() {
             precio_base={selectedSubasta.precio_base}
             puja_actual={selectedSubasta.puja_actual}
             imagenes={selectedSubasta.imagenes}
-            // ✔ CORREGIDO — ahora podrás detectar si el usuario es dueño
             id_usuario_creador={selectedSubasta.creador}
             categorias={selectedSubasta.categorias}
           />

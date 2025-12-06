@@ -50,7 +50,7 @@
   cursor: pointer;
   opacity: 0.85;
   transition: 0.2s ease;
-  border: 2px solid #3a3a3a;     /* 🔥 borde oscuro elegante */
+  border: 2px solid #3a3a3a;    
 }
 
 .image-thumbs img:hover {
@@ -74,7 +74,7 @@
 
 .current-bid span {
   font-weight: bold;
-  color: #4da6ff;               /* 🔵 azul con buen contraste en oscuro */
+  color: #4da6ff;              
   font-size: 1.3rem;
 }
 
@@ -122,7 +122,7 @@
 
 .secondary-btn {
   padding: 10px 20px;
-  background: #3b3b3b;         /* 🔥 ya no es blanco */
+  background: #3b3b3b;        
   color: #e5e5e5;
   border: none;
   border-radius: 12px;
@@ -135,14 +135,13 @@
   background: #4a4a4a;
 }
 
-/* --- Modal --- */
 .modal-backdrop {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.65); /* 🔥 más oscuro */
+  background: rgba(0, 0, 0, 0.65); 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -150,7 +149,7 @@
 }
 
 .modal {
-  background: #2c2c2c;          /* 🔥 modal oscuro */
+  background: #2c2c2c;         
   width: 350px;
   padding: 1.8rem;
   border-radius: 16px;
@@ -177,7 +176,6 @@
   box-shadow: 0 0 5px rgba(0, 122, 255, 0.5);
 }
 
-/* --- Responsivo --- */
 @media (max-width: 768px) {
   .auction-details {
     flex-direction: column;
@@ -190,7 +188,7 @@
 .modal-content{
   background-color: #1f1f1f;
 }
-/* Contenedor izquierdo ajustable */
+
 .auction-left {
   width: 100%;
   max-width: 450px;
@@ -199,16 +197,14 @@
   gap: 10px;
 }
 
-/* Imagen principal responsiva */
 .main-image {
   width: 100%;
-  height: 300px;        /* altura fija pero puedes ajustarla */
-  object-fit: contain;  /* ⚡ evita que se deforme */
+  height: 300px; 
+  object-fit: contain;  
   border-radius: 10px;
   background-color: #f3f3f3;
 }
 
-/* Contenedor de miniaturas */
 .image-thumbs {
   display: flex;
   gap: 10px;
@@ -216,11 +212,10 @@
   justify-content: center;
 }
 
-/* Miniaturas */
 .thumb-img {
   width: 70px;
   height: 70px;
-  object-fit: cover;  /* recorta un poco para que siempre sea cuadrada */
+  object-fit: cover;  
   border-radius: 8px;
   cursor: pointer;
   transition: transform 0.2s;
@@ -230,8 +225,6 @@
 .thumb-img:hover {
   transform: scale(1.07);
 }
-
-/* --- Campos editables para dueño --- */
 
 .editable-input {
   width: 100%;
@@ -252,7 +245,7 @@
 .editable-textarea {
   width: 100%;
   height: 120px;
-  resize: none !important; /* ⚡ no redimensionable */
+  resize: none !important; 
   padding: 12px;
   background: #1f1f1f;
   border: 1px solid #555;
@@ -268,11 +261,10 @@
   box-shadow: 0 0 6px rgba(0, 122, 255, 0.5);
 }
 
-/* Botón guardar */
 .save-btn {
   margin-top: 1rem;
   padding: 12px;
-  background: #4caf50;
+  background: #4da6ff;
   border: none;
   border-radius: 12px;
   color: white;
@@ -310,7 +302,7 @@
 }
 
 .categoria-item {
-  background: #ececec;
+  background: #4da6ff;
   padding: 4px 10px;
   border-radius: 8px;
   font-size: 0.85rem;
