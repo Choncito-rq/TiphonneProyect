@@ -149,6 +149,7 @@ export default function Home() {
                   imagen={subasta.imagen}
                   precio={subasta.precio_inicial}
                   fechafin={subasta.fecha_fin}
+                  categorias={subasta.categorias}
                   iduser={idUserActual}
                 />
               </div>

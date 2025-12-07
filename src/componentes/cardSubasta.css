@@ -47,3 +47,24 @@
   color: #666;
   margin-top: auto;
 }
+
+.card-sub-categorias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.cat-chip {
+  background: rgba(0, 119, 255, 0.18);
+  color: #005fcc;
+  padding: 6px 14px;
+  font-size: 0.78rem;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 119, 255, 0.3);
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+}

@@ -33,9 +33,7 @@ export default function CrearSubasta() {
 
   useEffect(() => {
     const stored = localStorage.getItem("user");
-
     const parsed = stored ? JSON.parse(stored) : null;
-
     setUsuario(parsed);
   }, []);
 
@@ -78,11 +76,15 @@ export default function CrearSubasta() {
       );
       return;
     }
-    if (categoriasSeleccionadas.length >= 4) {
-      alert("Máximo 4 categorías");
+
+    if (categoriasSeleccionadas.length < 4) {
+      setCategoriasSeleccionadas([...categoriasSeleccionadas, cat]);
       return;
     }
-    setCategoriasSeleccionadas([...categoriasSeleccionadas, cat]);
+
+    const nuevas = [...categoriasSeleccionadas];
+    nuevas[3] = cat;
+    setCategoriasSeleccionadas(nuevas);
   };
 
   const crearSubasta = async () => {
@@ -120,7 +122,6 @@ export default function CrearSubasta() {
       titulo: titulo,
       categorias: categoriasSeleccionadas,
     };
-    console.log(data);
 
     try {
       const res = await fetch(
@@ -135,8 +136,15 @@ export default function CrearSubasta() {
       await res.json();
       alert("Subasta creada con éxito");
 
+      // 🔥🔥🔥 LIMPIAR CAMPOS DESPUÉS DE CREAR 🔥🔥🔥
+      setDescripcion("");
+      setPrecioBase("");
+      setFechaFin("");
+      setTitulo("");
+      setCategoriasSeleccionadas([]);
       setImagenesPreview([]);
       setImagenesFiles([]);
+
       navigate(-1);
     } catch (error) {
       console.error(error);
@@ -223,12 +231,7 @@ export default function CrearSubasta() {
 
         <div className="input-group">
           <label>Imágenes</label>
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={manejarImagenes}
-          />
+          <input type="file" accept="image/*" multiple onChange={manejarImagenes} />
         </div>
 
         {imagenesPreview.length > 0 && (
@@ -236,10 +239,7 @@ export default function CrearSubasta() {
             {imagenesPreview.map((img, i) => (
               <div key={i} className="preview-item">
                 <img src={img.preview} alt="preview" />
-                <button
-                  className="btn-eliminar"
-                  onClick={() => eliminarImagen(i)}
-                >
+                <button className="btn-eliminar" onClick={() => eliminarImagen(i)}>
                   ✕
                 </button>
               </div>

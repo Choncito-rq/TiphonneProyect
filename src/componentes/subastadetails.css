@@ -285,18 +285,31 @@
   margin-bottom: 15px;
 }
 
-.categoria-list {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  padding: 0;
-  list-style: none;
-}
-
 .categoria-item {
   background: #4da6ff;
   padding: 4px 10px;
   border-radius: 8px;
   font-size: 0.85rem;
   color: #ffffff;
+}
+
+
+.categoria-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.categoria-chip-view {
+  background: #0077ff;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 0.83rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(255,255,255,0.3);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }

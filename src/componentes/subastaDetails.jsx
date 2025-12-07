@@ -19,7 +19,6 @@ export default function SubastaDetails({
     imagenes[0] || "https://picsum.photos/400/300"
   );
 
-  // ---------------- MODO EDICIÓN ----------------
   const [modoEdicion, setModoEdicion] = useState(false);
 
   const [tituloEdit, setTituloEdit] = useState(titulo);
@@ -29,14 +28,12 @@ export default function SubastaDetails({
 
   const [categoriasEdit, setCategoriasEdit] = useState(categorias);
 
-  // Imágenes actuales (URLs)
   const [imagenesEdit, setImagenesEdit] = useState(imagenes);
-
-  // Imágenes NUEVAS (File + preview)
   const [imagenesPreview, setImagenesPreview] = useState([]);
   const [imagenesFiles, setImagenesFiles] = useState([]);
 
   const [subiendo, setSubiendo] = useState(false);
+
   const listaCategorias = [
     "Tecnología",
     "Hogar",
@@ -58,7 +55,7 @@ export default function SubastaDetails({
   const esDuenioDeLaPuja = puja_actual?.id_usuario_pujador === idUser;
   const esDuenioDeLaSubasta = id_usuario_creador === idUser;
 
-  // ---------------- TIEMPO RESTANTE ----------------
+  // TIEMPO RESTANTE
   const [tiempoRestante, setTiempoRestante] = useState("");
 
   const calcularTiempoRestante = () => {
@@ -85,27 +82,29 @@ export default function SubastaDetails({
     return () => clearInterval(interval);
   }, [fecha_fin]);
 
-  // ---------------- CATEGORÍAS ----------------
   const toggleCategoria = (cat) => {
     if (categoriasEdit.includes(cat)) {
       setCategoriasEdit(categoriasEdit.filter((c) => c !== cat));
       return;
     }
+
     if (categoriasEdit.length >= 4) {
-      alert("Máximo 4 categorías");
+      const nuevas = [...categoriasEdit];
+      nuevas.pop(); // Quita la última
+      nuevas.push(cat); // Añade la nueva
+      setCategoriasEdit(nuevas);
       return;
     }
+
     setCategoriasEdit([...categoriasEdit, cat]);
   };
 
-  // ---------------- IMÁGENES NUEVAS ----------------
   const manejarImagenes = (e) => {
     const files = Array.from(e.target.files);
     const previews = files.map((file) => ({
       file,
       preview: URL.createObjectURL(file),
     }));
-
     setImagenesPreview((prev) => [...prev, ...previews]);
     setImagenesFiles((prev) => [...prev, ...files]);
   };
@@ -119,7 +118,6 @@ export default function SubastaDetails({
     setImagenesFiles(imagenesFiles.filter((_, i) => i !== index));
   };
 
-  // ---------------- CLOUDINARY ----------------
   const uploadImage = async (file) => {
     const data = new FormData();
     data.append("file", file);
@@ -135,12 +133,10 @@ export default function SubastaDetails({
     return json.secure_url || null;
   };
 
-  // ---------------- GUARDAR CAMBIOS ----------------
   const handleGuardarCambios = async () => {
     try {
       setSubiendo(true);
 
-      // Subir imágenes nuevas a Cloudinary
       const nuevasUrls = [];
       for (let file of imagenesFiles) {
         const url = await uploadImage(file);
@@ -149,7 +145,6 @@ export default function SubastaDetails({
 
       setSubiendo(false);
 
-      // URLs finales = actuales + nuevas
       const todasLasImagenes = [...imagenesEdit, ...nuevasUrls];
 
       const response = await fetch(
@@ -178,13 +173,12 @@ export default function SubastaDetails({
 
       alert("Subasta actualizada correctamente");
       setModoEdicion(false);
-      window.location.reload(); // refrescar datos
+      window.location.reload();
     } catch (e) {
       alert("Error al guardar los cambios");
     }
   };
 
-  // ---------------- PUJAR ----------------
   const handlePujar = async () => {
     if (esDuenioDeLaSubasta)
       return alert("No puedes pujar en tu propia subasta.");
@@ -219,19 +213,16 @@ export default function SubastaDetails({
     }
   };
 
-  // ---------------- UI ----------------
   return (
     <>
       <article className="auction-details">
         <div className="auction-left">
-          {/* ---------- IMAGEN PRINCIPAL ---------- */}
           <img
             className="main-image"
             src={imagenActual}
             alt="Imagen principal"
           />
 
-          {/* ---------- MINIATURAS ---------- */}
           <div className="image-thumbs">
             {imagenesEdit.map((img, i) => (
               <div key={i} className="thumb-wrapper">
@@ -253,7 +244,6 @@ export default function SubastaDetails({
             ))}
           </div>
 
-          {/* ---------- NUEVAS IMÁGENES PREVIEW ---------- */}
           {modoEdicion && imagenesPreview.length > 0 && (
             <div className="image-preview">
               {imagenesPreview.map((img, i) => (
@@ -270,7 +260,6 @@ export default function SubastaDetails({
             </div>
           )}
 
-          {/* ---------- INPUT PARA AGREGAR IMÁGENES ---------- */}
           {modoEdicion && (
             <input
               type="file"
@@ -282,7 +271,6 @@ export default function SubastaDetails({
         </div>
 
         <div className="auction-right">
-          {/* ---------- BOTÓN EDITAR ---------- */}
           {esDuenioDeLaSubasta && !modoEdicion && (
             <button
               className="primary-btn"
@@ -310,7 +298,6 @@ export default function SubastaDetails({
             Tiempo restante: <span>{tiempoRestante}</span>
           </p>
 
-          {/* ---------- TÍTULO ---------- */}
           {modoEdicion ? (
             <input
               className="editable-input"
@@ -321,7 +308,6 @@ export default function SubastaDetails({
             <h2>{titulo}</h2>
           )}
 
-          {/* ---------- CATEGORÍAS ---------- */}
           <h4>Categorías:</h4>
 
           {modoEdicion ? (
@@ -339,19 +325,19 @@ export default function SubastaDetails({
               ))}
             </div>
           ) : (
-            <ul className="categoria-list">
+            <div className="categoria-list">
               {categorias.map((c, i) => (
-                <li key={i}>{c}</li>
+                <span key={i} className="categoria-item">
+                  {c}
+                </span>
               ))}
-            </ul>
+            </div>
           )}
 
-          {/* ---------- PRECIOS ---------- */}
           <p className="current-bid">
             Puja actual: <span>{puja_actual?.monto ?? precio_base}</span>
           </p>
 
-          {/* ---------- PRECIO BASE ---------- */}
           {modoEdicion && (
             <>
               <label>Precio base</label>
@@ -364,7 +350,6 @@ export default function SubastaDetails({
             </>
           )}
 
-          {/* ---------- DESCRIPCIÓN ---------- */}
           {modoEdicion ? (
             <textarea
               className="editable-textarea"
@@ -375,7 +360,6 @@ export default function SubastaDetails({
             <p className="description">{descripcion}</p>
           )}
 
-          {/* ---------- FECHAS ---------- */}
           {modoEdicion ? (
             <div className="input-group">
               <label>Fecha fin</label>
@@ -392,7 +376,6 @@ export default function SubastaDetails({
             </p>
           )}
 
-          {/* ---------- BOTONES DE PUJA ---------- */}
           {!esDuenioDeLaPuja && !esDuenioDeLaSubasta && (
             <div className="bid-actions">
               <button
@@ -407,7 +390,6 @@ export default function SubastaDetails({
         </div>
       </article>
 
-      {/* ---------- MODAL DE PUJA ---------- */}
       {mostrarModal && (
         <div className="modal-backdrop">
           <div className="modal">
