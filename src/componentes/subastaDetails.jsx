@@ -208,6 +208,7 @@ export default function SubastaDetails({
 
       alert("Puja realizada correctamente");
       setMostrarModal(false);
+      window.location.reload();
     } catch (error) {
       alert("Error al pujar");
     }
@@ -337,7 +338,17 @@ export default function SubastaDetails({
           <p className="current-bid">
             Puja actual: <span>{puja_actual?.monto ?? precio_base}</span>
           </p>
-
+          {esDuenioDeLaPuja && (
+            <p
+              style={{
+                color: "limegreen",
+                fontWeight: "bold",
+                marginTop: "5px",
+              }}
+            >
+              Eres dueño de la puja actual
+            </p>
+          )}
           {modoEdicion && (
             <>
               <label>Precio base</label>
