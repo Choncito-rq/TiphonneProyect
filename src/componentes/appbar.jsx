@@ -8,23 +8,38 @@ export default function Appbar({ configOpen, setConfigOpen }) {
   const [showPanel, setShowPanel] = useState(false);
   const [usuario, setUsuario] = useState(null);
 
-  const user = JSON.parse(localStorage.getItem("user"));
   const abrirMenu = () => {
     const stored = localStorage.getItem("user");
     setUsuario(stored ? JSON.parse(stored) : null);
 
-    setShowPanel(true);
-    setConfigOpen(true);
+    setShowPanel(true); // panel se monta
+    setConfigOpen(true); // animación abre
   };
 
   const cerrarMenu = () => {
-    setConfigOpen(false);
-    setTimeout(() => setShowPanel(false), 250); // tiempo de animación
+    setConfigOpen(false); // animación cierra
+    setTimeout(() => setShowPanel(false), 250); // desmontar después de animar
   };
+
+  // cargar usuario
   useEffect(() => {
     const stored = localStorage.getItem("user");
     setUsuario(stored ? JSON.parse(stored) : null);
   }, []);
+
+  // 🔥 BLOQUEAR SCROLL CUANDO EL PANEL ESTÁ MONTADO → showPanel controla el DOM
+  useEffect(() => {
+    if (showPanel) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [showPanel]);
+
   return (
     <>
       <header className="appbar">
@@ -100,8 +115,6 @@ export default function Appbar({ configOpen, setConfigOpen }) {
               >
                 Crear Subasta
               </button>
-
-              <button className="config-btn">Artículos vendidos</button>
             </section>
 
             {/* SOPORTE */}
