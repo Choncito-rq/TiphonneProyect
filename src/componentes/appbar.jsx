@@ -27,7 +27,7 @@ export default function Appbar({ configOpen, setConfigOpen }) {
     setUsuario(stored ? JSON.parse(stored) : null);
   }, []);
 
-  // 🔥 BLOQUEAR SCROLL CUANDO EL PANEL ESTÁ MONTADO → showPanel controla el DOM
+  // BLOQUEAR SCROLL CUANDO EL PANEL ESTÁ MONTADO → showPanel controla el DOM
   useEffect(() => {
     if (showPanel) {
       document.body.style.overflow = "hidden";
@@ -117,16 +117,15 @@ export default function Appbar({ configOpen, setConfigOpen }) {
               </button>
             </section>
 
-            {/* SOPORTE */}
+            {/* soporte*/}
             <section className="config-section">
               <h3>Ayuda</h3>
 
-              <button className="config-btn">Reportar problema</button>
               <button className="config-btn">Términos y condiciones</button>
               <button className="config-btn">Privacidad</button>
             </section>
 
-            {/* CERRAR SESIÓN */}
+            {/*cerrar sesion */}
             <button
               type="button"
               className="logout-btn"
