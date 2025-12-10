@@ -115,6 +115,8 @@ export default function Appbar({ configOpen, setConfigOpen }) {
               >
                 Crear Subasta
               </button>
+
+              <button className="config-btn">Artículos vendidos</button>
             </section>
 
             {/* soporte*/}
